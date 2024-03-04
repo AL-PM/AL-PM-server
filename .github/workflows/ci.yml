@@ -1,9 +1,6 @@
 name: CI
 
 on:
-  push:
-    branches:
-      - 'feature/rangjin/ci'
   pull_request:
     branches:
       - 'develop'
