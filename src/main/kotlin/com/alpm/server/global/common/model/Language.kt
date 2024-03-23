@@ -1,4 +1,4 @@
-package com.alpm.server.global.model
+package com.alpm.server.global.common.model
 
 enum class Language (
 
