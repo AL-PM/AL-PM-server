@@ -4,6 +4,8 @@ import com.alpm.server.domain.algorithm.entity.Algorithm
 import com.alpm.server.domain.codegroup.entity.CodeGroup
 import com.alpm.server.global.common.model.BaseTimeEntity
 import jakarta.persistence.*
+import org.springframework.security.core.GrantedAuthority
+import org.springframework.security.core.userdetails.UserDetails
 
 @Entity
 class User (
@@ -40,5 +42,34 @@ class User (
     )
     val myCodeGroups: List<CodeGroup> = emptyList()
 
-): BaseTimeEntity() {
+): BaseTimeEntity(), UserDetails {
+
+    override fun getAuthorities(): MutableCollection<out GrantedAuthority>? {
+        return null
+    }
+
+    override fun getPassword(): String? {
+        return null
+    }
+
+    override fun getUsername(): String {
+        return id.toString()
+    }
+
+    override fun isAccountNonExpired(): Boolean {
+        return true
+    }
+
+    override fun isAccountNonLocked(): Boolean {
+        return true
+    }
+
+    override fun isCredentialsNonExpired(): Boolean {
+        return true
+    }
+
+    override fun isEnabled(): Boolean {
+        return true
+    }
+
 }

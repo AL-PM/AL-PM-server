@@ -1,7 +1,9 @@
 package com.alpm.server.domain.user.controller
 
+import com.alpm.server.domain.user.dto.LoginResponseDto
 import com.alpm.server.domain.user.dto.UserDto
 import com.alpm.server.global.auth.oauth2.OAuth2Service
+import io.swagger.v3.oas.annotations.Operation
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -19,6 +21,7 @@ class UserOAuth2Controller (
 
 ) {
 
+    @Operation(summary = "OAuth2 로그인 화면으로 리다이렉트")
     @GetMapping("/authorization/{registrationId}")
     fun oAuth2Redirect(
         @PathVariable("registrationId") registrationId: String
@@ -26,11 +29,12 @@ class UserOAuth2Controller (
         return ResponseEntity(oAuth2Service.oAuth2Redirect(registrationId), HttpStatus.MOVED_PERMANENTLY)
     }
 
+    @Operation(summary = "OAuth2 로그인 후 Token 발급")
     @GetMapping("/code/{registrationId}")
     fun oAuth2Code(
         @RequestParam code: String,
         @PathVariable("registrationId") registrationId: String
-    ): ResponseEntity<UserDto> {
+    ): ResponseEntity<LoginResponseDto> {
         return ResponseEntity.ok().body(oAuth2Service.oAuth2Login(code, registrationId))
     }
 

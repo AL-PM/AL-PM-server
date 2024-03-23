@@ -23,7 +23,7 @@ class OAuth2Service (
 
 ) {
 
-    fun oAuth2Login(code: String, registrationId: String): UserDto {
+    fun oAuth2Login(code: String, registrationId: String): LoginResponseDto {
         val accessToken = getAccessToken(code, registrationId)
         val userResourceNode = getUserResource(accessToken, registrationId)!!
         val uid = userResourceNode.get("id").asText()
@@ -40,7 +40,13 @@ class OAuth2Service (
             )
         }
 
-        return UserDto(user)
+        val tokenPair = jwtAuthenticationService.generateTokenPair(user.id!!.toString(), user.provider, user.uid)
+
+        return LoginResponseDto(
+            user = UserDto(user),
+            accessToken = tokenPair.first,
+            refreshToken = tokenPair.second
+        )
     }
 
     fun oAuth2Redirect(registrationId: String): HttpHeaders {
