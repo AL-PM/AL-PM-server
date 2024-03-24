@@ -1,4 +1,4 @@
-package com.alpm.server.global.config.exception
+package com.alpm.server.global.exception
 
 data class CustomException (
 

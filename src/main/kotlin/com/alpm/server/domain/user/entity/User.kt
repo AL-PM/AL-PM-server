@@ -2,21 +2,29 @@ package com.alpm.server.domain.user.entity
 
 import com.alpm.server.domain.algorithm.entity.Algorithm
 import com.alpm.server.domain.codegroup.entity.CodeGroup
-import com.alpm.server.global.model.BaseTimeEntity
+import com.alpm.server.global.common.model.BaseTimeEntity
 import jakarta.persistence.*
+import org.springframework.security.core.GrantedAuthority
+import org.springframework.security.core.userdetails.UserDetails
 
 @Entity
 class User (
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long,
+    val id: Long? = null,
 
-    val numOfTyping: Int,
+    val name: String,
 
-    val numOfWord: Int,
+    val provider: String,
 
-    val numOfBlock: Int,
+    val uid: String,
+
+    val numOfTyping: Int = 0,
+
+    val numOfWord: Int = 0,
+
+    val numOfBlock: Int = 0,
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
@@ -24,7 +32,7 @@ class User (
         joinColumns = [JoinColumn(name = "user_id")],
         inverseJoinColumns = [JoinColumn(name = "algorithm_id")]
     )
-    val myAlgorithms: Set<Algorithm>,
+    val myAlgorithms: Set<Algorithm> = emptySet(),
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
@@ -32,7 +40,36 @@ class User (
         joinColumns = [JoinColumn(name = "user_id")],
         inverseJoinColumns = [JoinColumn(name = "code_group_id")]
     )
-    val myCodeGroups: List<CodeGroup>
+    val myCodeGroups: List<CodeGroup> = emptyList()
 
-): BaseTimeEntity() {
+): BaseTimeEntity(), UserDetails {
+
+    override fun getAuthorities(): MutableCollection<out GrantedAuthority>? {
+        return null
+    }
+
+    override fun getPassword(): String? {
+        return null
+    }
+
+    override fun getUsername(): String {
+        return id.toString()
+    }
+
+    override fun isAccountNonExpired(): Boolean {
+        return true
+    }
+
+    override fun isAccountNonLocked(): Boolean {
+        return true
+    }
+
+    override fun isCredentialsNonExpired(): Boolean {
+        return true
+    }
+
+    override fun isEnabled(): Boolean {
+        return true
+    }
+
 }
