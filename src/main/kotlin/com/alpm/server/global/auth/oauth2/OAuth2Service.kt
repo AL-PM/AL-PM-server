@@ -28,6 +28,7 @@ class OAuth2Service (
         val userResourceNode = getUserResource(accessToken, registrationId)!!
         val uid = userResourceNode.get("id").asText()
         val nickname = userResourceNode.get("name").asText()
+        val profile = userResourceNode.get("picture").asText()
 
         var user = userRepository.findByUidAndProvider(uid, registrationId)
         if (user == null) {
@@ -35,9 +36,16 @@ class OAuth2Service (
                 User(
                     name = nickname,
                     uid = uid,
-                    provider = registrationId
+                    provider = registrationId,
+                    profile = profile
                 )
             )
+        } else {
+            if (user.name != nickname || user.profile != profile) {
+                user.name = nickname
+                user.profile = profile
+                user = userRepository.save(user)
+            }
         }
 
         val tokenPair = jwtAuthenticationService.generateTokenPair(user.id!!.toString(), user.provider, user.uid)

@@ -13,13 +13,21 @@ class CodeGroup (
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long,
 
+    val name: String,
+
+    val referencedCount: Int = 0,
+
+    val verified: Boolean,
+
     val visible: Boolean,
 
     val language: Language,
 
+    // 해당 CodeGroup 제작자
     @ManyToOne(fetch = FetchType.LAZY)
     val owner: User,
 
+    // 해당 CodeGroup에 속해 있는 Algorithm 리스트
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
         name = "groups_algorithms",

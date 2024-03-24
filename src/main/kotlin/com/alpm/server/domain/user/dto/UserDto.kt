@@ -13,6 +13,8 @@ data class UserDto (
 
     val uid: String,
 
+    val profile: String,
+
     val numOfTyping: Int,
 
     val numOfWord: Int,
@@ -30,6 +32,7 @@ data class UserDto (
         name = user.name,
         provider = user.provider,
         uid = user.uid,
+        profile = user.profile,
         numOfTyping = user.numOfTyping,
         numOfWord = user.numOfWord,
         numOfBlock = user.numOfBlock,
