@@ -7,7 +7,7 @@ import com.alpm.server.global.common.model.Language
 import jakarta.persistence.*
 
 @Entity
-class Algorithm (
+class Algorithm(
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,6 +20,9 @@ class Algorithm (
     val verified: Boolean,
 
     val language: Language,
+
+    @Column(length = 50)
+    val name: String,
 
     @Column(columnDefinition = "LONGTEXT")
     val content: String,
