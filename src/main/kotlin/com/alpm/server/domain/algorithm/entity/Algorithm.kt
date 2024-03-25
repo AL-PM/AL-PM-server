@@ -19,6 +19,9 @@ class Algorithm (
 
     val language: Language,
 
+    @Column(length = 50)
+    val name: String,
+
     @Column(columnDefinition = "LONGTEXT")
     val content: String,
 
