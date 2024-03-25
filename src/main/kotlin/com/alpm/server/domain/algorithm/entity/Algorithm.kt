@@ -11,18 +11,15 @@ class Algorithm(
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long,
+    val id: Long? = null,
 
     val name: String,
 
     val referencedCount: Int = 0,
 
-    val verified: Boolean,
+    val verified: Boolean = false,
 
     val language: Language,
-
-    @Column(length = 50)
-    val name: String,
 
     @Column(columnDefinition = "LONGTEXT")
     val content: String,
@@ -39,14 +36,14 @@ class Algorithm(
         fetch = FetchType.LAZY,
         mappedBy = "myAlgorithms"
     )
-    val myAlgorithms: List<User>,
+    val myAlgorithms: List<User> = emptyList(),
 
     // 사용하지 않는 attribute
     @ManyToMany(
         fetch = FetchType.LAZY,
         mappedBy = "groupsAlgorithms"
     )
-    val groupsAlgorithms: List<CodeGroup>
+    val groupsAlgorithms: List<CodeGroup> = emptyList()
 
 ): BaseTimeEntity() {
 }

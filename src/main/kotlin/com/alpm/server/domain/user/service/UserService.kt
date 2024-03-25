@@ -15,7 +15,7 @@ class UserService (
 ) {
 
     fun loadUserById(id: Long): User {
-        return userRepository.findByIdOrNull(id) ?: throw CustomException(ErrorCode.USER_NOT_FOUNT)
+        return userRepository.findByIdOrNull(id) ?: throw CustomException(ErrorCode.USER_NOT_FOUND)
     }
 
 }
