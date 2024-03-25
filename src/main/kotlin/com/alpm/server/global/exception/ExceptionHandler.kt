@@ -1,8 +1,11 @@
 package com.alpm.server.global.exception
 
+import com.alpm.server.global.exception.dto.ExceptionResponseDto
+import com.alpm.server.global.exception.dto.ValidationErrorFieldDto
 import jakarta.servlet.http.HttpServletRequest
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RestControllerAdvice
 import org.springframework.web.servlet.resource.NoResourceFoundException
@@ -35,6 +38,22 @@ class ExceptionHandler {
                 status = errorCode.status,
                 requestUri = request.requestURI,
                 data = errorCode.message
+            )
+        )
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException::class)
+    protected fun validationException(
+        e: MethodArgumentNotValidException,
+        request: HttpServletRequest
+    ): ResponseEntity<ExceptionResponseDto<List<ValidationErrorFieldDto>>> {
+        val errors = e.bindingResult.fieldErrors.map { ValidationErrorFieldDto(it.field, it.defaultMessage!!) }
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+            ExceptionResponseDto(
+                status = HttpStatus.BAD_REQUEST,
+                requestUri = request.requestURI,
+                data = errors
             )
         )
     }
