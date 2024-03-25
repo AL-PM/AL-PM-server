@@ -70,6 +70,7 @@ class GoogleOAuth2Service(
         val entity = HttpEntity(params, headers)
 
         val restTemplate = RestTemplate()
+        restTemplate.errorHandler = oAuth2ErrorHandler
         val response = restTemplate.exchange(tokenUri, HttpMethod.POST, entity, JsonNode::class.java)
         val accessTokenBody = response.body
 

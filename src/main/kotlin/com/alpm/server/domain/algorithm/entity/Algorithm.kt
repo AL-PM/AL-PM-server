@@ -13,7 +13,9 @@ class Algorithm(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long,
 
-    val referencedCount: Int,
+    val name: String,
+
+    val referencedCount: Int = 0,
 
     val verified: Boolean,
 
@@ -28,7 +30,11 @@ class Algorithm(
     @Column(columnDefinition = "LONGTEXT")
     val description: String,
 
-        // 사용하지 않는 attribute
+    // 해당 Algorithm 제작자
+    @ManyToOne(fetch = FetchType.LAZY)
+    val owner: User,
+
+    // 사용하지 않는 attribute
     @ManyToMany(
         fetch = FetchType.LAZY,
         mappedBy = "myAlgorithms"
