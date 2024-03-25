@@ -26,15 +26,15 @@ data class AlgorithmDto (
 
 ) {
 
-    constructor(Algorithm: Algorithm): this(
-            id = Algorithm.id,
-            referencedCount = Algorithm.referencedCount,
-            verified = Algorithm.verified,
-            language = Algorithm.language,
-            name = Algorithm.name,
-            content = Algorithm.content,
-            description = Algorithm.description,
-            createdAt = Algorithm.createdAt,
-            updatedAt = Algorithm.updatedAt,
+    constructor(algorithm: Algorithm): this(
+            id = algorithm.id,
+            referencedCount = algorithm.referencedCount,
+            verified = algorithm.verified,
+            language = algorithm.language,
+            name = algorithm.name,
+            content = algorithm.content,
+            description = algorithm.description,
+            createdAt = algorithm.createdAt,
+            updatedAt = algorithm.updatedAt,
     )
 }

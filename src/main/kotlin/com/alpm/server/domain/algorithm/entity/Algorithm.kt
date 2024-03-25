@@ -7,7 +7,7 @@ import com.alpm.server.global.common.model.Language
 import jakarta.persistence.*
 
 @Entity
-class Algorithm (
+class Algorithm(
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,7 +28,7 @@ class Algorithm (
     @Column(columnDefinition = "LONGTEXT")
     val description: String,
 
-    // 사용하지 않는 attribute
+        // 사용하지 않는 attribute
     @ManyToMany(
         fetch = FetchType.LAZY,
         mappedBy = "myAlgorithms"
