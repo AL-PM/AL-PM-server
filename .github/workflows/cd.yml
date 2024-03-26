@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - 'main'
-      - 'feature/rangjin/cd'
 
 permissions:
   contents: read
