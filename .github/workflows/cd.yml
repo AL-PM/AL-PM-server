@@ -42,7 +42,10 @@ jobs:
           username: ubuntu
           key: ${{ secrets.KEY }}
           script: |
-            sudo docker-compose stop ${{ secrets.SERVER_CONTAINER_NAME }}
-            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}:latest
-            
-            sudo docker-compose up -d
+#            sudo docker-compose stop ${{ secrets.SERVER_CONTAINER_NAME }}
+#            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}:latest
+#
+#            sudo docker-compose up -d
+            export DOCKER_USERNAME=${{ secrets.DOCKER_USERNAME }}
+            chmod 777 /home/ubuntu/docker/deploy.sh
+            /home/ubuntu/docker/deploy.sh $DOCKER_USERNAME
