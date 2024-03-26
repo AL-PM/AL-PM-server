@@ -16,4 +16,4 @@ COPY --from=build --chown=app-api:app-api /build/build/libs/*.jar ./app.jar
 
 USER app-api
 
-CMD ["java", "-jar", "app.jar"]
+CMD ["java", "-Dspring.profiles.active=${SPRING_PROFILE}", "-jar", "app.jar"]

@@ -42,5 +42,5 @@ jobs:
           key: ${{ secrets.KEY }}
           script: |
             export DOCKER_USERNAME=${{ secrets.DOCKER_USERNAME }}
-            chmod 777 /home/ubuntu/docker/deploy.sh
-            /home/ubuntu/docker/deploy.sh $DOCKER_USERNAME
+            sudo chmod 777 /home/ubuntu/docker/deploy.sh
+            sudo /home/ubuntu/docker/deploy.sh $DOCKER_USERNAME
