@@ -1,7 +1,7 @@
 package com.alpm.server.global.auth.jwt
 
 import com.alpm.server.global.exception.ErrorCode
-import com.alpm.server.global.exception.ExceptionResponseDto
+import com.alpm.server.global.exception.dto.ExceptionResponseDto
 import com.fasterxml.jackson.databind.ObjectMapper
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse

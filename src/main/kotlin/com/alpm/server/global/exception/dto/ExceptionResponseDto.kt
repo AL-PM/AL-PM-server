@@ -1,4 +1,4 @@
-package com.alpm.server.global.exception
+package com.alpm.server.global.exception.dto
 
 import org.springframework.http.HttpStatus
 import java.time.LocalDateTime
