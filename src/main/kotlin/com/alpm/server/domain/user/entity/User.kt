@@ -23,11 +23,13 @@ class User (
 
     var profile: String,
 
-    val numOfTyping: Int = 0,
+    val tracePoint: Int = 0,
 
-    val numOfWord: Int = 0,
+    val fillPoint: Int = 0,
 
-    val numOfBlock: Int = 0,
+    val blockPoint: Int = 0,
+
+    val sequencePoint: Int = 0,
 
     // 해당 User의 CodeGroup들 중 하나에라도 속해 있는 Algorithm 리스트
     @ManyToMany(fetch = FetchType.LAZY)

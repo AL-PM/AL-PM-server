@@ -12,13 +12,15 @@ class History (
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long,
 
+    val problemType: ProblemType,
+
+    val point: Int,
+
     @ManyToOne(fetch = FetchType.LAZY)
     val user: User,
 
     @ManyToOne(fetch = FetchType.LAZY)
     val algorithm: Algorithm
-
-    // todo: 문제 타입, 타수, 블록 수 등 정보 추가
 
 ): BaseTimeEntity() {
 }
