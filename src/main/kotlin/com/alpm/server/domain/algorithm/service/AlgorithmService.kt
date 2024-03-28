@@ -1,7 +1,7 @@
 package com.alpm.server.domain.algorithm.service
 
 import com.alpm.server.domain.algorithm.dao.AlgorithmRepository
-import com.alpm.server.domain.algorithm.dto.AlgorithmCreateRequestDto
+import com.alpm.server.domain.algorithm.dto.request.AlgorithmCreateRequestDto
 import com.alpm.server.domain.algorithm.dto.AlgorithmDto
 import com.alpm.server.domain.algorithm.dto.SimpleAlgorithmDto
 import com.alpm.server.domain.algorithm.entity.Algorithm

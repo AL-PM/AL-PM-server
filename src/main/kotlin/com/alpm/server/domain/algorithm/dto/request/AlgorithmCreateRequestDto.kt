@@ -1,4 +1,4 @@
-package com.alpm.server.domain.algorithm.dto
+package com.alpm.server.domain.algorithm.dto.request
 
 import com.alpm.server.global.common.model.Language
 
