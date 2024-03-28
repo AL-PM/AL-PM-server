@@ -62,4 +62,8 @@ class AlgorithmService(
         return user.myAlgorithms.map { SimpleAlgorithmDto(it) }
     }
 
+    fun readAllOwnedAlgorithmsByUserId(id:Long): List<SimpleAlgorithmDto> {
+        val user = userRepository.findByIdOrNull(id) ?: throw CustomException(ErrorCode.USER_NOT_FOUND)
+        return user.ownedAlgorithmList.map { SimpleAlgorithmDto(it) }
+    }
 }

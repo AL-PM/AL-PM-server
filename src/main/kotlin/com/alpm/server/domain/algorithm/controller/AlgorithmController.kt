@@ -38,7 +38,7 @@ class AlgorithmController(
     }
 
     @Operation(summary = "비회원용 Algorithm 단일 조회")
-    @GetMapping("/{id}")
+    @GetMapping("/anonymous/{id}")
     fun readAlgorithmForAnonymous(@PathVariable("id") id: Long): ResponseEntity<AlgorithmDto> {
         return ResponseEntity.ok().body(algorithmService.readAlgorithmByIdForAnonymous(id))
     }
@@ -53,6 +53,12 @@ class AlgorithmController(
     @GetMapping("/user/{id}")
     fun readAllAlgorithmsByUserId(@PathVariable("id") id: Long): ResponseEntity<List<SimpleAlgorithmDto>> {
         return ResponseEntity.ok().body(algorithmService.readAllAlgorithmsByUserId(id))
+    }
+
+    @Operation(summary = "특정 User(Owner)가 작성한 Algorithm 전체 조회")
+    @GetMapping("/owner/{id}")
+    fun readAllOwnedAlgorithmsByUserId(@PathVariable("id") id: Long): ResponseEntity<List<SimpleAlgorithmDto>> {
+        return ResponseEntity.ok().body(algorithmService.readAllOwnedAlgorithmsByUserId(id))
     }
 
 }
