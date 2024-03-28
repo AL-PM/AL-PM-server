@@ -16,11 +16,7 @@ class EnumValidator : ConstraintValidator<Enum?, String> {
         val enumValues: Array<out kotlin.Enum<*>> = annotation!!.enumClass.java.enumConstants
 
         for (enumValue in enumValues) {
-            if (value == enumValue.toString() || (annotation!!.ignoreCase && value.equals(
-                    enumValue.toString(),
-                    ignoreCase = true
-                ))
-            ) {
+            if (value == enumValue.toString()) {
                 return true
             }
         }

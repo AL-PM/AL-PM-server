@@ -16,10 +16,9 @@ data class AlgorithmCreateRequestDto(
     @field:Enum(
         message = "유효하지 않은 언어입니다",
         enumClass = Language::class,
-        ignoreCase = true,
         groups = [EnumGroup::class]
     )
-    val language: String?, //(enum - C/C++, JAVA, Python),
+    val language: String?, 
 
     @field:NotBlank(
         message = "알고리즘 내용은 필수 값 입니다",

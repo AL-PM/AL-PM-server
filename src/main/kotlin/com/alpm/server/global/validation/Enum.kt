@@ -21,6 +21,4 @@ annotation class Enum (
 
     val enumClass: KClass<out Enum<*>>,
 
-    val ignoreCase: Boolean = false
-
 )
