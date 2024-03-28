@@ -13,6 +13,10 @@ data class AlgorithmCreateRequestDto(
     )
     val name: String?,
 
+    @field:NotBlank(
+        message = "알고리즘 언어는 필수 값 입니다",
+        groups = [NotNullGroup::class]
+    )
     @field:Enum(
         message = "유효하지 않은 언어입니다",
         enumClass = Language::class,
