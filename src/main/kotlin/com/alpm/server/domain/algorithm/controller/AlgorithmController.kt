@@ -4,8 +4,10 @@ import com.alpm.server.domain.algorithm.dto.request.AlgorithmCreateRequestDto
 import com.alpm.server.domain.algorithm.dto.AlgorithmDto
 import com.alpm.server.domain.algorithm.dto.SimpleAlgorithmDto
 import com.alpm.server.domain.algorithm.service.AlgorithmService
+import com.alpm.server.global.validation.ValidationSequence
 import io.swagger.v3.oas.annotations.Operation
 import org.springframework.http.ResponseEntity
+import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -24,7 +26,9 @@ class AlgorithmController(
 
     @Operation(summary = "Algorithm 생성")
     @PostMapping("/create")
-    fun createAlgorithm(@RequestBody request: AlgorithmCreateRequestDto): ResponseEntity<AlgorithmDto> {
+    fun createAlgorithm(
+        @RequestBody @Validated(value = [ValidationSequence::class]) request: AlgorithmCreateRequestDto
+    ): ResponseEntity<AlgorithmDto> {
         return ResponseEntity.ok().body(algorithmService.saveAlgorithm(request))
     }
 

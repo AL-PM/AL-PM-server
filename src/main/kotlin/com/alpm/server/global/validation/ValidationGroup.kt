@@ -8,4 +8,6 @@ class ValidationGroup {
 
     interface MinMaxGroup {}
 
+    interface EnumGroup {}
+
 }
