@@ -1,12 +1,13 @@
 package com.alpm.server.domain.algorithm.service
 
 import com.alpm.server.domain.algorithm.dao.AlgorithmRepository
-import com.alpm.server.domain.algorithm.dto.AlgorithmCreateRequestDto
+import com.alpm.server.domain.algorithm.dto.request.AlgorithmCreateRequestDto
 import com.alpm.server.domain.algorithm.dto.AlgorithmDto
 import com.alpm.server.domain.algorithm.dto.SimpleAlgorithmDto
 import com.alpm.server.domain.algorithm.entity.Algorithm
 import com.alpm.server.domain.user.dao.UserRepository
 import com.alpm.server.domain.user.entity.User
+import com.alpm.server.global.common.model.Language
 import com.alpm.server.global.exception.CustomException
 import com.alpm.server.global.exception.ErrorCode
 import org.springframework.data.repository.findByIdOrNull
@@ -27,10 +28,10 @@ class AlgorithmService(
         val user = SecurityContextHolder.getContext().authentication.principal as User
 
         val algorithm = algorithmRepository.save(Algorithm(
-            name = request.name,
-            language = request.language,
-            content = request.content,
-            description = request.description,
+            name = request.name!!,
+            language = Language.valueOf(request.language!!),
+            content = request.content!!,
+            description = request.description!!,
             owner = user
         ))
 
