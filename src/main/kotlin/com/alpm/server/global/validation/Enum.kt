@@ -8,7 +8,8 @@ import kotlin.reflect.KClass
 @MustBeDocumented
 @Target(allowedTargets = [
     AnnotationTarget.FIELD
-])
+], AnnotationTarget.FIELD
+)
 @Retention(AnnotationRetention.RUNTIME)
 @Constraint(validatedBy = [EnumValidator::class])
 annotation class Enum (
