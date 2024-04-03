@@ -44,7 +44,7 @@ class CodegroupService(
         return user.myCodeGroups.map { CodeGroupRequestByUserIdDto(it) }
     }
 
-    fun readAllCodeInCodegroupsByID(id: Long): CodegroupDetailInfoRequestDto {
+    fun readAllCodeInCodegroupByGroupID(id: Long): CodegroupDetailInfoRequestDto {
         val codegroup = codegroupRepository.findByIdOrNull(id)?:throw Exception()
         return CodegroupDetailInfoRequestDto(codegroup)
     }

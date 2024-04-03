@@ -42,7 +42,7 @@ class CodegroupController(
 
     @Operation(summary = "CodeGroup 단일 조회")
     @GetMapping("/{id}")
-    fun readAllCodeInCodegroup(@PathVariable("id") id : Long): ResponseEntity<Any> {
-        return ResponseEntity.ok().body(codegroupService.readAllCodeInCodegroupsByID(id))
+    fun readAllCodeInCodegroupByGroupID(@PathVariable("id") id : Long): ResponseEntity<Any> {
+        return ResponseEntity.ok().body(codegroupService.readAllCodeInCodegroupByGroupID(id))
     }
 }
