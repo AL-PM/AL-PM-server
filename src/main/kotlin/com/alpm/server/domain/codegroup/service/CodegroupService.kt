@@ -1,11 +1,9 @@
 package com.alpm.server.domain.codegroup.service
 
+import com.alpm.server.domain.algorithm.entity.Algorithm
 import org.springframework.stereotype.Service
 import com.alpm.server.domain.codegroup.dao.CodeGroupRepository
-import com.alpm.server.domain.codegroup.dto.CodeGroupRequestByUserIdDto
-import com.alpm.server.domain.codegroup.dto.CodegroupCreateRequestDto
-import com.alpm.server.domain.codegroup.dto.CodegroupDto
-import com.alpm.server.domain.codegroup.dto.CodegroupListRequestDto
+import com.alpm.server.domain.codegroup.dto.*
 import com.alpm.server.domain.codegroup.entity.CodeGroup
 import com.alpm.server.domain.user.dao.UserRepository
 import com.alpm.server.domain.user.entity.User
@@ -15,11 +13,13 @@ import com.alpm.server.global.exception.ErrorCode
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.security.core.context.SecurityContextHolder
 
-
 @Service
 class CodegroupService(
+
     private val codegroupRepository: CodeGroupRepository,
+
     private val userRepository: UserRepository
+
 ) {
     fun saveCodegroup(request: CodegroupCreateRequestDto): CodegroupDto {
         val user = SecurityContextHolder.getContext().authentication.principal as User
@@ -44,4 +44,8 @@ class CodegroupService(
         return user.myCodeGroups.map { CodeGroupRequestByUserIdDto(it) }
     }
 
+    fun readAllCodeInCodegroupsByID(id: Long): CodegroupDetailInfoRequestDto {
+        val codegroup = codegroupRepository.findByIdOrNull(id)?:throw Exception()
+        return CodegroupDetailInfoRequestDto(codegroup)
+    }
 }
