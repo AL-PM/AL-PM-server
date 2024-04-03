@@ -36,6 +36,9 @@ class CodegroupController(
         return ResponseEntity.ok().body(codegroupService.readAllCodegroups())
     }
 
-
-
+    @Operation(summary = "특정 User의 CodeGroup 전체 조회")
+    @GetMapping("/user/{id}")
+    fun readAllCodegroups(@PathVariable("id") id : Long): ResponseEntity<List<CodegroupListRequestDto>> {
+        return ResponseEntity.ok().body(codegroupService.readAllCodegroupsByUserID(id))
+    }
 }
