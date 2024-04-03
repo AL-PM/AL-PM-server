@@ -4,7 +4,7 @@ import com.alpm.server.domain.codegroup.entity.CodeGroup
 import com.alpm.server.global.common.model.Language
 import java.time.LocalDateTime
 
-class CodegroupListRequestDto(
+class CodeGroupListRequestDto(
     val id: Long?,
 
     val name: String,
@@ -15,11 +15,11 @@ class CodegroupListRequestDto(
 
     val updatedAt: LocalDateTime
 ){
-    constructor (codegroup: CodeGroup): this(
-        id = codegroup.id,
-        name = codegroup.name,
-        language = codegroup.language,
-        createdAt = codegroup.createdAt,
-        updatedAt = codegroup.updatedAt
+    constructor (codeGroup: CodeGroup): this(
+        id = codeGroup.id,
+        name = codeGroup.name,
+        language = codeGroup.language,
+        createdAt = codeGroup.createdAt,
+        updatedAt = codeGroup.updatedAt
     )
 }

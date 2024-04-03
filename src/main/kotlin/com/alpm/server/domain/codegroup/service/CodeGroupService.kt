@@ -1,6 +1,5 @@
 package com.alpm.server.domain.codegroup.service
 
-import com.alpm.server.domain.algorithm.entity.Algorithm
 import org.springframework.stereotype.Service
 import com.alpm.server.domain.codegroup.dao.CodeGroupRepository
 import com.alpm.server.domain.codegroup.dto.*
@@ -14,17 +13,17 @@ import org.springframework.data.repository.findByIdOrNull
 import org.springframework.security.core.context.SecurityContextHolder
 
 @Service
-class CodegroupService(
+class CodeGroupService(
 
-    private val codegroupRepository: CodeGroupRepository,
+    private val codeGroupRepository: CodeGroupRepository,
 
     private val userRepository: UserRepository
 
 ) {
-    fun saveCodegroup(request: CodegroupCreateRequestDto): CodegroupDto {
+    fun saveCodeGroup(request: CodeGroupCreateRequestDto): CodeGroupDto {
         val user = SecurityContextHolder.getContext().authentication.principal as User
 
-        val codegroup =codegroupRepository.save(
+        val codeGroup =codeGroupRepository.save(
             CodeGroup(
                 name = request.name!!,
                 visible = request.visible,
@@ -32,20 +31,20 @@ class CodegroupService(
                 owner = user,
             )
         )
-        return CodegroupDto(codegroup)
+        return CodeGroupDto(codeGroup)
     }
 
-    fun readAllCodegroups(): List<CodegroupListRequestDto> {
-        return codegroupRepository.findAll().map { CodegroupListRequestDto(it) }
+    fun readAllCodeGroups(): List<CodeGroupListRequestDto> {
+        return codeGroupRepository.findAll().map { CodeGroupListRequestDto(it) }
     }
 
-    fun readAllCodegroupsByUserID(id : Long): List<CodeGroupRequestByUserIdDto> {
+    fun readAllCodeGroupsByUserID(id : Long): List<CodeGroupRequestByUserIdDto> {
         val user = userRepository.findByIdOrNull(id) ?: throw CustomException(ErrorCode.USER_NOT_FOUND)
         return user.myCodeGroups.map { CodeGroupRequestByUserIdDto(it) }
     }
 
-    fun readAllCodeInCodegroupByGroupID(id: Long): CodegroupDetailInfoRequestDto {
-        val codegroup = codegroupRepository.findByIdOrNull(id)?:throw Exception()
-        return CodegroupDetailInfoRequestDto(codegroup)
+    fun readAllCodeInCodeGroupByGroupID(id: Long): CodeGroupDetailInfoRequestDto {
+        val codeGroup = codeGroupRepository.findByIdOrNull(id)?:throw Exception()
+        return CodeGroupDetailInfoRequestDto(codeGroup)
     }
 }

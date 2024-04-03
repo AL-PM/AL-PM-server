@@ -1,13 +1,12 @@
 package com.alpm.server.domain.codegroup.dto
 
 import com.alpm.server.domain.algorithm.dto.SimpleAlgorithmDto
-import com.alpm.server.domain.algorithm.entity.Algorithm
 import com.alpm.server.domain.codegroup.entity.CodeGroup
 import com.alpm.server.domain.user.dto.OwnerDto
 import com.alpm.server.global.common.model.Language
 import java.time.LocalDateTime
 
-class CodegroupDetailInfoRequestDto(
+class CodeGroupDetailInfoRequestDto(
     val id: Long,
 
     val visible: Boolean,

@@ -17,12 +17,12 @@ class CodeGroupRequestByUserIdDto(
 
     val updatedAt: LocalDateTime
 ) {
-    constructor(codegroup: CodeGroup): this(
-        id = codegroup.id,
-        name = codegroup.name,
-        visible = codegroup.visible,
-        language = codegroup.language,
-        createdAt = codegroup.createdAt,
-        updatedAt = codegroup.updatedAt
+    constructor(codeGroup: CodeGroup): this(
+        id = codeGroup.id,
+        name = codeGroup.name,
+        visible = codeGroup.visible,
+        language = codeGroup.language,
+        createdAt = codeGroup.createdAt,
+        updatedAt = codeGroup.updatedAt
     )
 }

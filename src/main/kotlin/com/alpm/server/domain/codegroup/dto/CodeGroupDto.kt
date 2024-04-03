@@ -5,7 +5,7 @@ import com.alpm.server.domain.user.dto.OwnerDto
 import com.alpm.server.global.common.model.Language
 import java.time.LocalDateTime
 
-data class CodegroupDto(
+data class CodeGroupDto(
 
     val id: Long,
 
