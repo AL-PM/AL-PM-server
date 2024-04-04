@@ -34,17 +34,19 @@ class CodeGroupService(
         return CodeGroupDto(codeGroup)
     }
 
-    fun readAllCodeGroups(): List<CodeGroupListRequestDto> {
-        return codeGroupRepository.findAll().map { CodeGroupListRequestDto(it) }
+    fun readAllCodeGroups(): List<CodeGroupListResponseDto> {
+        val user = SecurityContextHolder.getContext().authentication.principal as User
+        return codeGroupRepository.findAll().filter { it.visible || (!it.visible && it.owner==user) }.map { CodeGroupListResponseDto(it) }
     }
 
-    fun readAllCodeGroupsByUserID(id : Long): List<CodeGroupRequestByUserIdDto> {
-        val user = userRepository.findByIdOrNull(id) ?: throw CustomException(ErrorCode.USER_NOT_FOUND)
-        return user.myCodeGroups.map { CodeGroupRequestByUserIdDto(it) }
+    fun readAllCodeGroupsByUserID(id : Long): List<CodeGroupListResponseDto> {
+        val currentUser = SecurityContextHolder.getContext().authentication.principal as User
+        val targetUser = userRepository.findByIdOrNull(id) ?: throw CustomException(ErrorCode.USER_NOT_FOUND)
+        return targetUser.myCodeGroups.filter { it.visible || (!it.visible && it.owner==currentUser) }.map { CodeGroupListResponseDto(it) }
     }
 
-    fun readAllCodeInCodeGroupByGroupId(id: Long): CodeGroupDetailInfoRequestDto {
+    fun readCodeGroupById(id: Long): CodeGroupDto {
         val codeGroup = codeGroupRepository.findByIdOrNull(id)?:throw Exception()
-        return CodeGroupDetailInfoRequestDto(codeGroup)
+        return CodeGroupDto(codeGroup)
     }
 }

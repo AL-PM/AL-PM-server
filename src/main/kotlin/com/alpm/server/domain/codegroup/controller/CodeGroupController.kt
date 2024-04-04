@@ -28,19 +28,19 @@ class CodeGroupController(
 
     @Operation(summary = "CodeGroup 전체 조회")
     @GetMapping("")
-    fun readAllCodeGroups(): ResponseEntity<List<CodeGroupListRequestDto>> {
+    fun readAllCodeGroups(): ResponseEntity<List<CodeGroupListResponseDto>> {
         return ResponseEntity.ok().body(codeGroupService.readAllCodeGroups())
     }
 
     @Operation(summary = "특정 User의 CodeGroup 전체 조회")
     @GetMapping("/user/{id}")
-    fun readCodeGroupsByUserID(@PathVariable("id") id : Long): ResponseEntity<List<CodeGroupRequestByUserIdDto>> {
+    fun readCodeGroupsByUserID(@PathVariable("id") id : Long): ResponseEntity<List<CodeGroupListResponseDto>> {
         return ResponseEntity.ok().body(codeGroupService.readAllCodeGroupsByUserID(id))
     }
 
     @Operation(summary = "CodeGroup 단일 조회")
     @GetMapping("/{id}")
     fun readCodeGroupById(@PathVariable("id") id : Long): ResponseEntity<Any> {
-        return ResponseEntity.ok().body(codeGroupService.readAllCodeInCodeGroupByGroupId(id))
+        return ResponseEntity.ok().body(codeGroupService.readCodeGroupById(id))
     }
 }

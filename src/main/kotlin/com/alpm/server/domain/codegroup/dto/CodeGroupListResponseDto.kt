@@ -4,7 +4,7 @@ import com.alpm.server.domain.codegroup.entity.CodeGroup
 import com.alpm.server.global.common.model.Language
 import java.time.LocalDateTime
 
-class CodeGroupRequestByUserIdDto(
+class CodeGroupListResponseDto(
     val id: Long,
 
     val name: String,
@@ -16,8 +16,8 @@ class CodeGroupRequestByUserIdDto(
     val createdAt: LocalDateTime,
 
     val updatedAt: LocalDateTime
-) {
-    constructor(codeGroup: CodeGroup): this(
+){
+    constructor (codeGroup: CodeGroup): this(
         id = codeGroup.id!!,
         name = codeGroup.name,
         visible = codeGroup.visible,
