@@ -23,13 +23,13 @@ data class CodeGroupDto(
 
 ) {
 
-    constructor (codegroup: CodeGroup): this(
-        id = codegroup.id!!,
-        name = codegroup.name,
-        language = codegroup.language,
-        visible = codegroup.visible,
-        owner = OwnerDto(codegroup.owner),
-        createdAt = codegroup.createdAt,
-        updatedAt = codegroup.updatedAt,
+    constructor (codeGroup: CodeGroup): this(
+        id = codeGroup.id!!,
+        name = codeGroup.name,
+        language = codeGroup.language,
+        visible = codeGroup.visible,
+        owner = OwnerDto(codeGroup.owner),
+        createdAt = codeGroup.createdAt,
+        updatedAt = codeGroup.updatedAt,
     )
 }

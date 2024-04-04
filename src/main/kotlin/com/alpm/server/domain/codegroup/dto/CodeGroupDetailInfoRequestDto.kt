@@ -15,19 +15,19 @@ class CodeGroupDetailInfoRequestDto(
 
     val owner: OwnerDto,
 
-    val algorithms:List<SimpleAlgorithmDto>,
+    val groupsAlgorithms:List<SimpleAlgorithmDto>,
 
     val createdAt: LocalDateTime,
 
     val updatedAt: LocalDateTime
 ) {
-    constructor(codegroup : CodeGroup): this(
-        id = codegroup.id!!,
-        visible = codegroup.visible,
-        language = codegroup.language,
-        owner = OwnerDto(codegroup.owner),
-        algorithms = codegroup.groupsAlgorithms.map { SimpleAlgorithmDto(it) },
-        createdAt = codegroup.createdAt,
-        updatedAt = codegroup.updatedAt,
+    constructor(codeGroup : CodeGroup): this(
+        id = codeGroup.id!!,
+        visible = codeGroup.visible,
+        language = codeGroup.language,
+        owner = OwnerDto(codeGroup.owner),
+        groupsAlgorithms = codeGroup.groupsAlgorithms.map { SimpleAlgorithmDto(it) },
+        createdAt = codeGroup.createdAt,
+        updatedAt = codeGroup.updatedAt,
     )
 }

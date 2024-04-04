@@ -26,7 +26,7 @@ class CodeGroupService(
         val codeGroup =codeGroupRepository.save(
             CodeGroup(
                 name = request.name!!,
-                visible = request.visible,
+                visible = request.visible!!,
                 language = Language.valueOf(request.language!!),
                 owner = user,
             )
@@ -43,7 +43,7 @@ class CodeGroupService(
         return user.myCodeGroups.map { CodeGroupRequestByUserIdDto(it) }
     }
 
-    fun readAllCodeInCodeGroupByGroupID(id: Long): CodeGroupDetailInfoRequestDto {
+    fun readAllCodeInCodeGroupByGroupId(id: Long): CodeGroupDetailInfoRequestDto {
         val codeGroup = codeGroupRepository.findByIdOrNull(id)?:throw Exception()
         return CodeGroupDetailInfoRequestDto(codeGroup)
     }

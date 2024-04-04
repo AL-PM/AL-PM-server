@@ -14,7 +14,7 @@ class CodeGroupController(
     private val codeGroupService: CodeGroupService
 
 ) {
-    @Operation(summary = "Code Group 생성")
+    @Operation(summary = "CodeGroup 생성")
     @PostMapping("/create")
     fun createCodeGroup(@RequestBody request: CodeGroupCreateRequestDto): ResponseEntity<CodeGroupDto> {
         return ResponseEntity.ok().body(codeGroupService.saveCodeGroup(request))
@@ -34,13 +34,13 @@ class CodeGroupController(
 
     @Operation(summary = "특정 User의 CodeGroup 전체 조회")
     @GetMapping("/user/{id}")
-    fun readAllCodeGroupsByUserID(@PathVariable("id") id : Long): ResponseEntity<List<CodeGroupRequestByUserIdDto>> {
+    fun readCodeGroupsByUserID(@PathVariable("id") id : Long): ResponseEntity<List<CodeGroupRequestByUserIdDto>> {
         return ResponseEntity.ok().body(codeGroupService.readAllCodeGroupsByUserID(id))
     }
 
     @Operation(summary = "CodeGroup 단일 조회")
     @GetMapping("/{id}")
-    fun readAllCodeInCodeGroupByGroupID(@PathVariable("id") id : Long): ResponseEntity<Any> {
-        return ResponseEntity.ok().body(codeGroupService.readAllCodeInCodeGroupByGroupID(id))
+    fun readCodeGroupById(@PathVariable("id") id : Long): ResponseEntity<Any> {
+        return ResponseEntity.ok().body(codeGroupService.readAllCodeInCodeGroupByGroupId(id))
     }
 }

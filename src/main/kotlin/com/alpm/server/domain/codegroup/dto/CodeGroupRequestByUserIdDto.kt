@@ -5,7 +5,7 @@ import com.alpm.server.global.common.model.Language
 import java.time.LocalDateTime
 
 class CodeGroupRequestByUserIdDto(
-    val id: Long?,
+    val id: Long,
 
     val name: String,
 
@@ -18,7 +18,7 @@ class CodeGroupRequestByUserIdDto(
     val updatedAt: LocalDateTime
 ) {
     constructor(codeGroup: CodeGroup): this(
-        id = codeGroup.id,
+        id = codeGroup.id!!,
         name = codeGroup.name,
         visible = codeGroup.visible,
         language = codeGroup.language,
