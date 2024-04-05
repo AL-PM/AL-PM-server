@@ -1,4 +1,4 @@
-package com.alpm.server.domain.codegroup.dto
+package com.alpm.server.domain.codegroup.dto.request
 
 import com.alpm.server.global.common.model.Language
 import com.alpm.server.global.validation.Enum

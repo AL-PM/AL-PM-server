@@ -1,4 +1,4 @@
-package com.alpm.server.domain.codegroup.dto
+package com.alpm.server.domain.codegroup.dto.response
 
 import com.alpm.server.domain.codegroup.entity.CodeGroup
 import com.alpm.server.global.common.model.Language

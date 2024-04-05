@@ -3,6 +3,8 @@ package com.alpm.server.domain.codegroup.service
 import org.springframework.stereotype.Service
 import com.alpm.server.domain.codegroup.dao.CodeGroupRepository
 import com.alpm.server.domain.codegroup.dto.*
+import com.alpm.server.domain.codegroup.dto.request.CodeGroupCreateRequestDto
+import com.alpm.server.domain.codegroup.dto.response.CodeGroupListResponseDto
 import com.alpm.server.domain.codegroup.entity.CodeGroup
 import com.alpm.server.domain.user.dao.UserRepository
 import com.alpm.server.domain.user.entity.User
@@ -10,7 +12,6 @@ import com.alpm.server.global.common.model.Language
 import com.alpm.server.global.exception.CustomException
 import com.alpm.server.global.exception.ErrorCode
 import org.springframework.data.repository.findByIdOrNull
-import org.springframework.http.ResponseEntity
 import org.springframework.security.core.context.SecurityContextHolder
 
 @Service
