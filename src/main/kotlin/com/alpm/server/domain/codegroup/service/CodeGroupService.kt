@@ -36,7 +36,7 @@ class CodeGroupService(
         return CodeGroupDto(codeGroup)
     }
 
-    fun putCodeGroupByID(id: Long): CodeGroupDto {
+    fun putCodeGroupById(id: Long): CodeGroupDto {
         val user = SecurityContextHolder.getContext().authentication.principal as User
         val codeGroup = codeGroupRepository.findByIdOrNull(id) ?: throw CustomException(ErrorCode.CODE_GROUP_NOT_FOUND)
 
@@ -49,13 +49,13 @@ class CodeGroupService(
 
     fun readAllCodeGroups(): List<CodeGroupListResponseDto> {
         val user = SecurityContextHolder.getContext().authentication.principal as User
-        return codeGroupRepository.findAll().filter { it.visible || (!it.visible && it.owner==user) }.map { CodeGroupListResponseDto(it) }
+        return codeGroupRepository.findAll().filter { it.visible || (it.owner.id==user.id) }.map { CodeGroupListResponseDto(it) }
     }
 
     fun readCodeGroupsByUserId(id : Long): List<CodeGroupListResponseDto> {
         val currentUser = SecurityContextHolder.getContext().authentication.principal as User
         val targetUser = userRepository.findByIdOrNull(id) ?: throw CustomException(ErrorCode.USER_NOT_FOUND)
-        return targetUser.myCodeGroups.filter { it.visible || (!it.visible && it.owner==currentUser) }.map { CodeGroupListResponseDto(it) }
+        return targetUser.myCodeGroups.filter { it.visible || (it.owner.id==currentUser.id) }.map { CodeGroupListResponseDto(it) }
     }
 
     fun readCodeGroupByGroupId(id: Long): CodeGroupDto {

@@ -4,6 +4,7 @@ import com.alpm.server.global.common.model.Language
 import com.alpm.server.global.validation.Enum
 import com.alpm.server.global.validation.ValidationGroup.*
 import jakarta.validation.constraints.NotBlank
+import jakarta.validation.constraints.NotNull
 
 class CodeGroupCreateRequestDto(
     @field:NotBlank(
@@ -19,7 +20,7 @@ class CodeGroupCreateRequestDto(
     )
     val language: String?,
 
-    @field:NotBlank(
+    @field:NotNull(
         message = "그룹 공개 여부는 필수 값 입니다",
         groups = [NotNullGroup::class]
     )

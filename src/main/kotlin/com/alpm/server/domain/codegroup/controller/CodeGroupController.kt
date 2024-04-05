@@ -28,8 +28,8 @@ class CodeGroupController(
 
     @Operation(summary = "CodeGroup 가져오기")
     @PutMapping("/import/{id}")
-    fun putCodeGroup(@PathVariable("id") id: Long): ResponseEntity<CodeGroupDto> {
-        return ResponseEntity.ok(codeGroupService.putCodeGroupByID(id))
+    fun putCodeGroupById(@PathVariable("id") id: Long): ResponseEntity<CodeGroupDto> {
+        return ResponseEntity.ok(codeGroupService.putCodeGroupById(id))
     }
 
     @Operation(summary = "CodeGroup 전체 조회")
