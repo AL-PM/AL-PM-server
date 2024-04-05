@@ -37,10 +37,10 @@ class CodeGroupService(
 
     fun putCodeGroupByID(id: Long): CodeGroupDto {
         val user = SecurityContextHolder.getContext().authentication.principal as User
-        val codeGroup = codeGroupRepository.findByIdOrNull(id) ?: throw Exception() // NOT_FOUND
+        val codeGroup = codeGroupRepository.findByIdOrNull(id) ?: throw CustomException(ErrorCode.CODE_GROUP_NOT_FOUND)
 
         if (codeGroup in user.myCodeGroups) {
-            throw Exception() // BAD_REQUEST
+            throw CustomException(ErrorCode.CODE_GROUP_EXIST)
         }
         // user.myCodeGroups.add // add codegroup into myCodeGroup
         return CodeGroupDto(codeGroup)
@@ -51,14 +51,14 @@ class CodeGroupService(
         return codeGroupRepository.findAll().filter { it.visible || (!it.visible && it.owner==user) }.map { CodeGroupListResponseDto(it) }
     }
 
-    fun readAllCodeGroupsByUserID(id : Long): List<CodeGroupListResponseDto> {
+    fun readCodeGroupsByUserId(id : Long): List<CodeGroupListResponseDto> {
         val currentUser = SecurityContextHolder.getContext().authentication.principal as User
         val targetUser = userRepository.findByIdOrNull(id) ?: throw CustomException(ErrorCode.USER_NOT_FOUND)
         return targetUser.myCodeGroups.filter { it.visible || (!it.visible && it.owner==currentUser) }.map { CodeGroupListResponseDto(it) }
     }
 
-    fun readCodeGroupById(id: Long): CodeGroupDto {
-        val codeGroup = codeGroupRepository.findByIdOrNull(id)?:throw Exception()
+    fun readCodeGroupByGroupId(id: Long): CodeGroupDto {
+        val codeGroup = codeGroupRepository.findByIdOrNull(id) ?: throw CustomException(ErrorCode.CODE_GROUP_NOT_FOUND)
         return CodeGroupDto(codeGroup)
     }
 }

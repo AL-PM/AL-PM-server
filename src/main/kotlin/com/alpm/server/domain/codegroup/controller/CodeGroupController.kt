@@ -34,13 +34,13 @@ class CodeGroupController(
 
     @Operation(summary = "특정 User의 CodeGroup 전체 조회")
     @GetMapping("/user/{id}")
-    fun readCodeGroupsByUserID(@PathVariable("id") id : Long): ResponseEntity<List<CodeGroupListResponseDto>> {
-        return ResponseEntity.ok().body(codeGroupService.readAllCodeGroupsByUserID(id))
+    fun readCodeGroupsByUserId(@PathVariable("id") id : Long): ResponseEntity<List<CodeGroupListResponseDto>> {
+        return ResponseEntity.ok().body(codeGroupService.readCodeGroupsByUserId(id))
     }
 
     @Operation(summary = "CodeGroup 단일 조회")
     @GetMapping("/{id}")
     fun readCodeGroupById(@PathVariable("id") id : Long): ResponseEntity<Any> {
-        return ResponseEntity.ok().body(codeGroupService.readCodeGroupById(id))
+        return ResponseEntity.ok().body(codeGroupService.readCodeGroupByGroupId(id))
     }
 }
