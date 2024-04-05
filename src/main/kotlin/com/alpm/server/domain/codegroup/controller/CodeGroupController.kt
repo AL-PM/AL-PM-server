@@ -20,11 +20,11 @@ class CodeGroupController(
         return ResponseEntity.ok().body(codeGroupService.saveCodeGroup(request))
     }
 
-//    @Operation(summary = "CodeGroup 가져오기")
-//    @PutMapping("/import/{id}")
-//    fun putCodeGroup(@PathVariable("id") id: Long): ResponseEntity<Unit> {
-//        return ResponseEntity.ok(codeGroupService.putCodeGroupByID(id))
-//    }
+    @Operation(summary = "CodeGroup 가져오기")
+    @PutMapping("/import/{id}")
+    fun putCodeGroup(@PathVariable("id") id: Long): ResponseEntity<CodeGroupDto> {
+        return ResponseEntity.ok(codeGroupService.putCodeGroupByID(id))
+    }
 
     @Operation(summary = "CodeGroup 전체 조회")
     @GetMapping("")

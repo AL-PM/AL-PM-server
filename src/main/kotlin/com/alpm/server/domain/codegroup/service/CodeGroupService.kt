@@ -10,6 +10,7 @@ import com.alpm.server.global.common.model.Language
 import com.alpm.server.global.exception.CustomException
 import com.alpm.server.global.exception.ErrorCode
 import org.springframework.data.repository.findByIdOrNull
+import org.springframework.http.ResponseEntity
 import org.springframework.security.core.context.SecurityContextHolder
 
 @Service
@@ -31,6 +32,17 @@ class CodeGroupService(
                 owner = user,
             )
         )
+        return CodeGroupDto(codeGroup)
+    }
+
+    fun putCodeGroupByID(id: Long): CodeGroupDto {
+        val user = SecurityContextHolder.getContext().authentication.principal as User
+        val codeGroup = codeGroupRepository.findByIdOrNull(id) ?: throw Exception() // NOT_FOUND
+
+        if (codeGroup in user.myCodeGroups) {
+            throw Exception() // BAD_REQUEST
+        }
+        // user.myCodeGroups.add // add codegroup into myCodeGroup
         return CodeGroupDto(codeGroup)
     }
 
