@@ -11,13 +11,13 @@ class CodeGroup (
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long,
+    val id: Long? = null,
 
     val name: String,
 
     val referencedCount: Int = 0,
 
-    val verified: Boolean,
+    val verified: Boolean = false,
 
     val visible: Boolean,
 
@@ -34,14 +34,14 @@ class CodeGroup (
         joinColumns = [JoinColumn(name = "code_group_id")],
         inverseJoinColumns = [JoinColumn(name = "algorithm_id")]
     )
-    val groupsAlgorithms: List<Algorithm>,
+    val groupsAlgorithms: List<Algorithm> = emptyList(),
 
     // 사용하지 않는 attribute
     @ManyToMany(
         fetch = FetchType.LAZY,
         mappedBy = "myCodeGroups"
     )
-    val myCodeGroups: List<User>
+    val myCodeGroups: List<User> = emptyList()
 
 ): BaseTimeEntity() {
 }
