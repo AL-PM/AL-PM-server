@@ -3,8 +3,10 @@ package com.alpm.server.domain.codegroup.controller
 
 import com.alpm.server.domain.codegroup.dto.*
 import com.alpm.server.domain.codegroup.service.CodeGroupService
+import com.alpm.server.global.validation.ValidationSequence
 import io.swagger.v3.oas.annotations.Operation
 import org.springframework.http.ResponseEntity
+import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
 
 @RestController
@@ -16,7 +18,9 @@ class CodeGroupController(
 ) {
     @Operation(summary = "CodeGroup 생성")
     @PostMapping("/create")
-    fun createCodeGroup(@RequestBody request: CodeGroupCreateRequestDto): ResponseEntity<CodeGroupDto> {
+    fun createCodeGroup(
+        @RequestBody @Validated(value = [ValidationSequence::class]) request: CodeGroupCreateRequestDto
+    ): ResponseEntity<CodeGroupDto> {
         return ResponseEntity.ok().body(codeGroupService.saveCodeGroup(request))
     }
 
