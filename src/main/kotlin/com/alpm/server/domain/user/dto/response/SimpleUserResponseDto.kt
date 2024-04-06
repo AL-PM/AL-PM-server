@@ -1,9 +1,9 @@
-package com.alpm.server.domain.user.dto
+package com.alpm.server.domain.user.dto.response
 
 import com.alpm.server.domain.user.entity.User
 import java.time.LocalDateTime
 
-data class UserDto (
+data class SimpleUserResponseDto (
 
     val id: Long,
 

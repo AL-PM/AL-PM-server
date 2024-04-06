@@ -1,8 +1,8 @@
 package com.alpm.server.domain.user.controller
 
-import com.alpm.server.domain.history.dto.HistoryDto
-import com.alpm.server.domain.user.dto.RefreshTokenDto
-import com.alpm.server.domain.user.dto.UserDto
+import com.alpm.server.domain.history.dto.response.HistoryDetailResponseDto
+import com.alpm.server.domain.user.dto.response.RefreshTokenResponseDto
+import com.alpm.server.domain.user.dto.response.SimpleUserResponseDto
 import com.alpm.server.domain.user.service.UserService
 import com.alpm.server.global.auth.jwt.JwtAuthenticationService
 import io.swagger.v3.oas.annotations.Operation
@@ -25,20 +25,20 @@ class UserController (
 
     @Operation(summary = "Access Token 재발급")
     @GetMapping("/refresh")
-    fun refreshToken(@RequestHeader("Refresh") refreshToken: String): ResponseEntity<RefreshTokenDto> {
+    fun refreshToken(@RequestHeader("Refresh") refreshToken: String): ResponseEntity<RefreshTokenResponseDto> {
         return ResponseEntity.ok().body(jwtAuthenticationService.refreshToken(refreshToken))
     }
 
     @Operation(summary = "User 단일 조회")
     @GetMapping("/{id}")
-    fun readUserById(@PathVariable("id") id: Long): ResponseEntity<UserDto> {
+    fun readUserById(@PathVariable("id") id: Long): ResponseEntity<SimpleUserResponseDto> {
         return ResponseEntity.ok().body(userService.readUserById(id))
     }
 
-    @Operation(summary = "로그인 한 사용자의 History 조회")
-    @GetMapping("/history")
-    fun readMyHistory(): ResponseEntity<List<HistoryDto>> {
-        return ResponseEntity.ok().body(userService.readMyHistory())
+    @Operation(summary = "User History 조회")
+    @GetMapping("/{id}/history")
+    fun readUserHistory(@PathVariable("id") id: Long): ResponseEntity<List<HistoryDetailResponseDto>> {
+        return ResponseEntity.ok().body(userService.readUserHistory(id))
     }
 
 }

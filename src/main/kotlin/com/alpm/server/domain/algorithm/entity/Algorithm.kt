@@ -1,6 +1,5 @@
 package com.alpm.server.domain.algorithm.entity
 
-import com.alpm.server.domain.codegroup.entity.CodeGroup
 import com.alpm.server.domain.user.entity.User
 import com.alpm.server.global.common.model.BaseTimeEntity
 import com.alpm.server.global.common.model.Language
@@ -15,7 +14,7 @@ class Algorithm(
 
     val name: String,
 
-    val referencedCount: Int = 0,
+    var referencedCount: Int = 0,
 
     val verified: Boolean = false,
 
@@ -30,20 +29,6 @@ class Algorithm(
     // 해당 Algorithm 제작자
     @ManyToOne(fetch = FetchType.LAZY)
     val owner: User,
-
-    // 사용하지 않는 attribute
-    @ManyToMany(
-        fetch = FetchType.LAZY,
-        mappedBy = "myAlgorithms"
-    )
-    val myAlgorithms: List<User> = emptyList(),
-
-    // 사용하지 않는 attribute
-    @ManyToMany(
-        fetch = FetchType.LAZY,
-        mappedBy = "groupsAlgorithms"
-    )
-    val groupsAlgorithms: List<CodeGroup> = emptyList()
 
 ): BaseTimeEntity() {
 }
