@@ -6,7 +6,7 @@ import com.alpm.server.global.validation.ValidationGroup.*
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.NotNull
 
-class CodeGroupCreateRequestDto(
+data class CodeGroupCreateRequestDto(
     @field:NotBlank(
         message = "코드그룹 제목은 필수 값 입니다",
         groups = [NotNullGroup::class]

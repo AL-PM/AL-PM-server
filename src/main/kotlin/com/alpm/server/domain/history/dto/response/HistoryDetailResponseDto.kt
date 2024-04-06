@@ -1,11 +1,11 @@
-package com.alpm.server.domain.history.dto
+package com.alpm.server.domain.history.dto.response
 
-import com.alpm.server.domain.algorithm.dto.SimpleAlgorithmDto
+import com.alpm.server.domain.algorithm.dto.response.SimpleAlgorithmResponseDto
 import com.alpm.server.domain.history.entity.History
 import com.alpm.server.domain.history.entity.ProblemType
 import java.time.LocalDateTime
 
-data class HistoryDto (
+data class HistoryDetailResponseDto (
 
     val id: Long,
 
@@ -13,7 +13,7 @@ data class HistoryDto (
 
     val point: Int,
 
-    val algorithm: SimpleAlgorithmDto,
+    val algorithm: SimpleAlgorithmResponseDto,
 
     val createdAt: LocalDateTime,
 
@@ -25,7 +25,7 @@ data class HistoryDto (
         id = history.id,
         problemType = history.problemType,
         point = history.point,
-        algorithm = SimpleAlgorithmDto(history.algorithm),
+        algorithm = SimpleAlgorithmResponseDto(history.algorithm),
         createdAt = history.createdAt,
         updatedAt = history.updatedAt
     )

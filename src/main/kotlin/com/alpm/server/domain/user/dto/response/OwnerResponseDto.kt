@@ -1,8 +1,8 @@
-package com.alpm.server.domain.user.dto
+package com.alpm.server.domain.user.dto.response
 
 import com.alpm.server.domain.user.entity.User
 
-data class OwnerDto (
+data class OwnerResponseDto (
 
     val id: Long,
 

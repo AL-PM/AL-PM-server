@@ -12,7 +12,9 @@ enum class ErrorCode (
 
     OAUTH2_PROVIDER_ERROR(HttpStatus.BAD_REQUEST, "잘못된 OAuth 제공자입니다"),
     OAUTH2_FAILURE(HttpStatus.BAD_REQUEST, "OAuth 인증에 실패하였습니다"),
-    CODE_GROUP_EXIST(HttpStatus.BAD_REQUEST, "이미 추가된 코드그룹입니다."),
+    CODE_GROUP_EXIST(HttpStatus.BAD_REQUEST, "이미 추가된 코드그룹입니다"),
+    NOT_YOUR_CODE_GROUP(HttpStatus.BAD_REQUEST, "권한이 없는 코드그룹입니다"),
+    LANGUAGE_MISMATCH(HttpStatus.BAD_REQUEST, "언어가 일치하지 않습니다"),
 
     WRONG_URL(HttpStatus.NOT_FOUND, "잘못된 url 입니다"),
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 유저를 찾을 수 없습니다"),

@@ -1,8 +1,8 @@
 package com.alpm.server.domain.algorithm.controller
 
 import com.alpm.server.domain.algorithm.dto.request.AlgorithmCreateRequestDto
-import com.alpm.server.domain.algorithm.dto.AlgorithmDto
-import com.alpm.server.domain.algorithm.dto.SimpleAlgorithmDto
+import com.alpm.server.domain.algorithm.dto.response.AlgorithmDetailResponseDto
+import com.alpm.server.domain.algorithm.dto.response.SimpleAlgorithmResponseDto
 import com.alpm.server.domain.algorithm.service.AlgorithmService
 import com.alpm.server.global.validation.ValidationSequence
 import io.swagger.v3.oas.annotations.Operation
@@ -28,37 +28,39 @@ class AlgorithmController(
     @PostMapping("/create")
     fun createAlgorithm(
         @RequestBody @Validated(value = [ValidationSequence::class]) request: AlgorithmCreateRequestDto
-    ): ResponseEntity<AlgorithmDto> {
+    ): ResponseEntity<AlgorithmDetailResponseDto> {
         return ResponseEntity.ok().body(algorithmService.saveAlgorithm(request))
     }
 
     @Operation(summary = "Algorithm 단일 조회")
     @GetMapping("/{id}")
-    fun readAlgorithm(@PathVariable("id") id: Long): ResponseEntity<AlgorithmDto> {
+    fun readAlgorithm(@PathVariable("id") id: Long): ResponseEntity<AlgorithmDetailResponseDto> {
         return ResponseEntity.ok().body(algorithmService.readAlgorithmById(id))
     }
 
     @Operation(summary = "비회원용 Algorithm 단일 조회")
     @GetMapping("/anonymous/{id}")
-    fun readAlgorithmForAnonymous(@PathVariable("id") id: Long): ResponseEntity<AlgorithmDto> {
+    fun readAlgorithmForAnonymous(@PathVariable("id") id: Long): ResponseEntity<AlgorithmDetailResponseDto> {
         return ResponseEntity.ok().body(algorithmService.readAlgorithmByIdForAnonymous(id))
     }
 
     @Operation(summary = "Algorithm 전체 조회")
     @GetMapping("/")
-    fun readAllAlgorithms(): ResponseEntity<List<SimpleAlgorithmDto>> {
+    fun readAllAlgorithms(): ResponseEntity<List<SimpleAlgorithmResponseDto>> {
         return ResponseEntity.ok().body(algorithmService.readAllAlgorithms())
     }
 
     @Operation(summary = "특정 유저의 Algorithm 전체 조회")
     @GetMapping("/user/{id}")
-    fun readAllAlgorithmsByUserId(@PathVariable("id") id: Long): ResponseEntity<List<SimpleAlgorithmDto>> {
+    fun readAllAlgorithmsByUserId(@PathVariable("id") id: Long): ResponseEntity<List<SimpleAlgorithmResponseDto>> {
         return ResponseEntity.ok().body(algorithmService.readAllAlgorithmsByUserId(id))
     }
 
     @Operation(summary = "특정 User(Owner)가 작성한 Algorithm 전체 조회")
     @GetMapping("/owner/{id}")
-    fun readAllOwnedAlgorithmsByUserId(@PathVariable("id") id: Long): ResponseEntity<List<SimpleAlgorithmDto>> {
+    fun readAllOwnedAlgorithmsByUserId(
+        @PathVariable("id") id: Long
+    ): ResponseEntity<List<SimpleAlgorithmResponseDto>> {
         return ResponseEntity.ok().body(algorithmService.readAllOwnedAlgorithmsByUserId(id))
     }
 

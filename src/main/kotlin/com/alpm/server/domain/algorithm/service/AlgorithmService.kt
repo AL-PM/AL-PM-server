@@ -2,8 +2,8 @@ package com.alpm.server.domain.algorithm.service
 
 import com.alpm.server.domain.algorithm.dao.AlgorithmRepository
 import com.alpm.server.domain.algorithm.dto.request.AlgorithmCreateRequestDto
-import com.alpm.server.domain.algorithm.dto.AlgorithmDto
-import com.alpm.server.domain.algorithm.dto.SimpleAlgorithmDto
+import com.alpm.server.domain.algorithm.dto.response.AlgorithmDetailResponseDto
+import com.alpm.server.domain.algorithm.dto.response.SimpleAlgorithmResponseDto
 import com.alpm.server.domain.algorithm.entity.Algorithm
 import com.alpm.server.domain.user.dao.UserRepository
 import com.alpm.server.domain.user.entity.User
@@ -24,7 +24,7 @@ class AlgorithmService(
 
 ){
 
-    fun saveAlgorithm(request: AlgorithmCreateRequestDto): AlgorithmDto {
+    fun saveAlgorithm(request: AlgorithmCreateRequestDto): AlgorithmDetailResponseDto {
         val user = SecurityContextHolder.getContext().authentication.principal as User
 
         val algorithm = algorithmRepository.save(Algorithm(
@@ -35,36 +35,49 @@ class AlgorithmService(
             owner = user
         ))
 
-        return AlgorithmDto(algorithm)
+        return AlgorithmDetailResponseDto(algorithm)
     }
 
-    fun readAlgorithmById(id: Long): AlgorithmDto {
+    fun readAlgorithmById(id: Long): AlgorithmDetailResponseDto {
         val algorithm = algorithmRepository.findByIdOrNull(id) ?: throw CustomException(ErrorCode.ALGORITHM_NOT_FOUND)
 
-        return AlgorithmDto(algorithm)
+        return AlgorithmDetailResponseDto(algorithm)
     }
 
-    fun readAlgorithmByIdForAnonymous(id: Long): AlgorithmDto {
+    fun readAlgorithmByIdForAnonymous(id: Long): AlgorithmDetailResponseDto {
         val algorithm = algorithmRepository.findByIdOrNull(id) ?: throw CustomException(ErrorCode.ALGORITHM_NOT_FOUND)
 
         if (!algorithm.verified) {
             throw CustomException(ErrorCode.ANONYMOUS)
         }
 
-        return AlgorithmDto(algorithm)
+        return AlgorithmDetailResponseDto(algorithm)
     }
 
-    fun readAllAlgorithms(): List<SimpleAlgorithmDto> {
-        return algorithmRepository.findAll().map { SimpleAlgorithmDto(it) }
+    fun readAllAlgorithms(): List<SimpleAlgorithmResponseDto> {
+        return algorithmRepository.findAll().map { SimpleAlgorithmResponseDto(it) }
     }
 
-    fun readAllAlgorithmsByUserId(id: Long): List<SimpleAlgorithmDto> {
+    fun readAllAlgorithmsByUserId(id: Long): List<SimpleAlgorithmResponseDto> {
         val user = userRepository.findByIdOrNull(id) ?: throw CustomException(ErrorCode.USER_NOT_FOUND)
-        return user.myAlgorithms.map { SimpleAlgorithmDto(it) }
+        val codeGroupList = user.codeGroupList
+            .map {
+                it.codeGroup
+            }
+            .filter {
+                it.visible || it.owner.id!! == user.id!!
+            }
+
+        val set = HashSet<Algorithm>()
+        for (codeGroup in codeGroupList) {
+            set.addAll(codeGroup.algorithmList.map { it.algorithm })
+        }
+
+        return set.map { SimpleAlgorithmResponseDto(it) }
     }
 
-    fun readAllOwnedAlgorithmsByUserId(id:Long): List<SimpleAlgorithmDto> {
+    fun readAllOwnedAlgorithmsByUserId(id:Long): List<SimpleAlgorithmResponseDto> {
         val user = userRepository.findByIdOrNull(id) ?: throw CustomException(ErrorCode.USER_NOT_FOUND)
-        return user.ownedAlgorithmList.map { SimpleAlgorithmDto(it) }
+        return user.ownedAlgorithmList.map { SimpleAlgorithmResponseDto(it) }
     }
 }
