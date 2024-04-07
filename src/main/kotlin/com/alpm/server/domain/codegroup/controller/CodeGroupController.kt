@@ -1,7 +1,10 @@
 package com.alpm.server.domain.codegroup.controller
 
 
+import com.alpm.server.domain.algorithm.dto.request.AlgorithmSearchRequestDto
+import com.alpm.server.domain.algorithm.dto.response.SimpleAlgorithmResponseDto
 import com.alpm.server.domain.codegroup.dto.request.CodeGroupCreateRequestDto
+import com.alpm.server.domain.codegroup.dto.request.CodeGroupSearchRequestDto
 import com.alpm.server.domain.codegroup.dto.response.CodeGroupDetailResponseDto
 import com.alpm.server.domain.codegroup.dto.response.SimpleCodeGroupResponseDto
 import com.alpm.server.domain.codegroup.service.CodeGroupService
@@ -63,6 +66,14 @@ class CodeGroupController(
         @PathVariable("algorithmId") algorithmId: Long
     ): ResponseEntity<Unit> {
         return ResponseEntity.ok().body(codeGroupService.importAlgorithmToCodeGroup(codeGroupId, algorithmId))
+    }
+
+    @Operation(summary = "CodeGroup 검색")
+    @GetMapping("/search")
+    fun searchAllAlgorithm(
+        @ModelAttribute @Validated(value = [ValidationSequence::class]) request: CodeGroupSearchRequestDto
+    ): ResponseEntity<List<SimpleCodeGroupResponseDto>> {
+        return ResponseEntity.ok().body(codeGroupService.searchAllCodeGroups(request))
     }
 
 }
