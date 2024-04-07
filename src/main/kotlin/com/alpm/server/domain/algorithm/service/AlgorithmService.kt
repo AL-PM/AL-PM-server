@@ -2,6 +2,7 @@ package com.alpm.server.domain.algorithm.service
 
 import com.alpm.server.domain.algorithm.dao.AlgorithmRepository
 import com.alpm.server.domain.algorithm.dto.request.AlgorithmCreateRequestDto
+import com.alpm.server.domain.algorithm.dto.request.AlgorithmSearchRequestDto
 import com.alpm.server.domain.algorithm.dto.response.AlgorithmDetailResponseDto
 import com.alpm.server.domain.algorithm.dto.response.SimpleAlgorithmResponseDto
 import com.alpm.server.domain.algorithm.entity.Algorithm
@@ -80,4 +81,18 @@ class AlgorithmService(
         val user = userRepository.findByIdOrNull(id) ?: throw CustomException(ErrorCode.USER_NOT_FOUND)
         return user.ownedAlgorithmList.map { SimpleAlgorithmResponseDto(it) }
     }
+
+    fun searchAllAlgorithms(request: AlgorithmSearchRequestDto): List<SimpleAlgorithmResponseDto> {
+        val language = if (request.language == null) {
+            null
+        } else {
+            // Language enum 에 없는 경우는 request dto 의 enum 어노테이션에서 검사
+            Language.valueOf(request.language)
+        }
+        val verified = request.verified
+        val keyword = request.keyword
+        return algorithmRepository.findAlgorithmsByLanguageAndVerifiedAndKeyword(language, verified, keyword)
+            .map { SimpleAlgorithmResponseDto(it) }
+    }
+
 }
