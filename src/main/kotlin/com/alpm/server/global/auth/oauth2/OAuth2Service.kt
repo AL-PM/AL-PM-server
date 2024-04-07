@@ -1,8 +1,8 @@
 package com.alpm.server.global.auth.oauth2
 
 import com.alpm.server.domain.user.dao.UserRepository
-import com.alpm.server.domain.user.dto.LoginResponseDto
-import com.alpm.server.domain.user.dto.UserDto
+import com.alpm.server.domain.user.dto.response.UserLoginResponseDto
+import com.alpm.server.domain.user.dto.response.SimpleUserResponseDto
 import com.alpm.server.domain.user.entity.User
 import com.alpm.server.global.auth.jwt.JwtAuthenticationService
 import com.alpm.server.global.exception.CustomException
@@ -23,7 +23,7 @@ class OAuth2Service (
 
 ) {
 
-    fun oAuth2Login(code: String, registrationId: String): LoginResponseDto {
+    fun oAuth2Login(code: String, registrationId: String): UserLoginResponseDto {
         val accessToken = getAccessToken(code, registrationId)
         val userResourceNode = getUserResource(accessToken, registrationId)!!
         val uid = userResourceNode.get("id").asText()
@@ -50,8 +50,8 @@ class OAuth2Service (
 
         val tokenPair = jwtAuthenticationService.generateTokenPair(user.id!!.toString(), user.provider, user.uid)
 
-        return LoginResponseDto(
-            user = UserDto(user),
+        return UserLoginResponseDto(
+            user = SimpleUserResponseDto(user),
             accessToken = tokenPair.first,
             refreshToken = tokenPair.second
         )

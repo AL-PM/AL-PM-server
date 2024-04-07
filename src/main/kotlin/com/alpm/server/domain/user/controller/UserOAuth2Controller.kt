@@ -1,7 +1,6 @@
 package com.alpm.server.domain.user.controller
 
-import com.alpm.server.domain.user.dto.LoginResponseDto
-import com.alpm.server.domain.user.dto.UserDto
+import com.alpm.server.domain.user.dto.response.UserLoginResponseDto
 import com.alpm.server.global.auth.oauth2.OAuth2Service
 import io.swagger.v3.oas.annotations.Operation
 import org.springframework.http.HttpHeaders
@@ -34,7 +33,7 @@ class UserOAuth2Controller (
     fun oAuth2Code(
         @RequestParam code: String,
         @PathVariable("registrationId") registrationId: String
-    ): ResponseEntity<LoginResponseDto> {
+    ): ResponseEntity<UserLoginResponseDto> {
         return ResponseEntity.ok().body(oAuth2Service.oAuth2Login(code, registrationId))
     }
 

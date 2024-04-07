@@ -1,6 +1,6 @@
 package com.alpm.server.global.auth.jwt
 
-import com.alpm.server.domain.user.dto.RefreshTokenDto
+import com.alpm.server.domain.user.dto.response.RefreshTokenResponseDto
 import com.alpm.server.domain.user.service.UserService
 import com.alpm.server.global.exception.CustomException
 import com.alpm.server.global.exception.ErrorCode
@@ -54,7 +54,7 @@ class JwtAuthenticationService (
         return Pair(accessToken, refreshToken)
     }
 
-    fun refreshToken(refreshToken: String): RefreshTokenDto {
+    fun refreshToken(refreshToken: String): RefreshTokenResponseDto {
         val split = refreshToken.split(" ")
         if (split.size != 2 || split[0] != "Bearer") {
             throw CustomException(ErrorCode.INVALID_TOKEN)
@@ -71,7 +71,7 @@ class JwtAuthenticationService (
             .add(mapOf(Pair("provider", user.provider), Pair("uid", user.uid)))
             .build()
 
-        return RefreshTokenDto(generateToken(tokenPeriod, claims))
+        return RefreshTokenResponseDto(generateToken(tokenPeriod, claims))
     }
 
     fun generateToken(period: Long, claims: Claims): String {

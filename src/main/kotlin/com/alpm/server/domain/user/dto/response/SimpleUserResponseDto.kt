@@ -1,9 +1,9 @@
-package com.alpm.server.domain.user.dto
+package com.alpm.server.domain.user.dto.response
 
 import com.alpm.server.domain.user.entity.User
 import java.time.LocalDateTime
 
-data class UserDto (
+data class SimpleUserResponseDto (
 
     val id: Long,
 
@@ -15,11 +15,13 @@ data class UserDto (
 
     val profile: String,
 
-    val numOfTyping: Int,
+    val tracePoint: Int,
 
-    val numOfWord: Int,
+    val fillPoint: Int,
 
-    val numOfBlock: Int,
+    val blockPoint: Int,
+
+    val sequencePoint: Int,
 
     val createdAt: LocalDateTime,
 
@@ -33,9 +35,10 @@ data class UserDto (
         provider = user.provider,
         uid = user.uid,
         profile = user.profile,
-        numOfTyping = user.numOfTyping,
-        numOfWord = user.numOfWord,
-        numOfBlock = user.numOfBlock,
+        tracePoint = user.tracePoint,
+        fillPoint = user.fillPoint,
+        blockPoint = user.blockPoint,
+        sequencePoint = user.sequencePoint,
         createdAt = user.createdAt,
         updatedAt = user.updatedAt
     )

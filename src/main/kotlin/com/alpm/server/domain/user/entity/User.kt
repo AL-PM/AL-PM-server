@@ -4,6 +4,7 @@ import com.alpm.server.domain.algorithm.entity.Algorithm
 import com.alpm.server.domain.codegroup.entity.CodeGroup
 import com.alpm.server.domain.history.entity.History
 import com.alpm.server.global.common.model.BaseTimeEntity
+import com.alpm.server.global.common.relation.entity.UserCodeGroup
 import jakarta.persistence.*
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
@@ -23,29 +24,20 @@ class User (
 
     var profile: String,
 
-    val numOfTyping: Int = 0,
+    val tracePoint: Int = 0,
 
-    val numOfWord: Int = 0,
+    val fillPoint: Int = 0,
 
-    val numOfBlock: Int = 0,
+    val blockPoint: Int = 0,
 
-    // 해당 User의 CodeGroup들 중 하나에라도 속해 있는 Algorithm 리스트
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-        name = "my_algorithms",
-        joinColumns = [JoinColumn(name = "user_id")],
-        inverseJoinColumns = [JoinColumn(name = "algorithm_id")]
-    )
-    val myAlgorithms: Set<Algorithm> = emptySet(),
+    val sequencePoint: Int = 0,
 
     // 해당 User의 CodeGroup 리스트
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-        name = "my_code_groups",
-        joinColumns = [JoinColumn(name = "user_id")],
-        inverseJoinColumns = [JoinColumn(name = "code_group_id")]
+    @OneToMany(
+        fetch = FetchType.LAZY,
+        mappedBy = "user"
     )
-    val myCodeGroups: List<CodeGroup> = emptyList(),
+    val codeGroupList: List<UserCodeGroup> = emptyList(),
 
     // 해당 User가 제작한 Algorithm 리스트
     @OneToMany(
@@ -53,6 +45,13 @@ class User (
         mappedBy = "owner"
     )
     val ownedAlgorithmList: List<Algorithm> = emptyList(),
+
+    // 해당 User가 제작한 CodeGroup 리스트
+    @OneToMany(
+        fetch = FetchType.LAZY,
+        mappedBy = "owner"
+    )
+    val ownedCodeGroupList: List<CodeGroup> = emptyList(),
 
     // 해당 User의 Algorithm 문제 해결 기록
     @OneToMany(
