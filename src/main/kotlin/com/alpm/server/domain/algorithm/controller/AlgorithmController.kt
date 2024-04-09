@@ -7,6 +7,8 @@ import com.alpm.server.domain.algorithm.dto.response.SimpleAlgorithmResponseDto
 import com.alpm.server.domain.algorithm.service.AlgorithmService
 import com.alpm.server.global.validation.ValidationSequence
 import io.swagger.v3.oas.annotations.Operation
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import org.springframework.http.ResponseEntity
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
@@ -42,8 +44,8 @@ class AlgorithmController(
 
     @Operation(summary = "Algorithm 전체 조회")
     @GetMapping("/")
-    fun readAllAlgorithms(): ResponseEntity<List<SimpleAlgorithmResponseDto>> {
-        return ResponseEntity.ok().body(algorithmService.readAllAlgorithms())
+    fun readAllAlgorithms(pageable: Pageable): ResponseEntity<Page<SimpleAlgorithmResponseDto>> {
+        return ResponseEntity.ok().body(algorithmService.readAllAlgorithms(pageable))
     }
 
     @Operation(summary = "특정 유저의 Algorithm 전체 조회")
