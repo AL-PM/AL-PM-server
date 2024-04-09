@@ -56,7 +56,7 @@ class User (
     // 해당 User의 Algorithm 문제 해결 기록
     @OneToMany(
         fetch = FetchType.LAZY,
-        mappedBy = "user"
+        mappedBy = "user",
     )
     val historyList: List<History> = emptyList()
 
