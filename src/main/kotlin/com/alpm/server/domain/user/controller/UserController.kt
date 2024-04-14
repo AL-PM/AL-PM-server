@@ -1,8 +1,6 @@
 package com.alpm.server.domain.user.controller
 
-import com.alpm.server.domain.history.dto.response.HistoryDetailResponseDto
 import com.alpm.server.domain.user.dto.response.RefreshTokenResponseDto
-import com.alpm.server.domain.user.dto.response.SimpleUserResponseDto
 import com.alpm.server.domain.user.dto.response.UserWithHistoryResponseDto
 import com.alpm.server.domain.user.service.UserService
 import com.alpm.server.global.auth.jwt.JwtAuthenticationService

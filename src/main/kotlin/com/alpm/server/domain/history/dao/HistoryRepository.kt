@@ -9,8 +9,7 @@ import java.time.LocalDateTime
 interface HistoryRepository: JpaRepository<History, Long> {
 
     @Query("SELECT h FROM History h " +
-            "WHERE (h.user = :user) AND (h.createdAt BETWEEN :startDateTime AND :endDateTime) " +
-            "ORDER BY h.createdAt")
+            "WHERE (h.user = :user) AND (h.createdAt BETWEEN :startDateTime AND :endDateTime) ")
     fun findAllByUserAndCreatedAtBetween(user: User, startDateTime: LocalDateTime, endDateTime: LocalDateTime): List<History>
 
 }
