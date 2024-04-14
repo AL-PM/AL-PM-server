@@ -1,6 +1,6 @@
 package com.alpm.server.domain.user.dto.response
 
-import com.alpm.server.domain.history.dto.response.HistoryDetailResponseDto
+import com.alpm.server.domain.history.dto.response.HistorySizeDto
 import com.alpm.server.domain.user.entity.User
 import java.time.LocalDateTime
 
@@ -24,7 +24,7 @@ data class UserWithHistoryResponseDto (
 
     val sequencePoint: Int,
 
-    val historyList: List<List<HistoryDetailResponseDto>>,
+    val historyList: List<HistorySizeDto>,
 
     val createdAt: LocalDateTime,
 
@@ -32,7 +32,7 @@ data class UserWithHistoryResponseDto (
 
 ) {
 
-    constructor(user: User, historyList: List<List<HistoryDetailResponseDto>>): this(
+    constructor(user: User, historyList: List<HistorySizeDto>): this(
         id = user.id!!,
         name = user.name,
         provider = user.provider,
