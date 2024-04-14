@@ -1,8 +1,6 @@
 package com.alpm.server.domain.codegroup.service
 
 import com.alpm.server.domain.algorithm.dao.AlgorithmRepository
-import com.alpm.server.domain.algorithm.dto.request.AlgorithmSearchRequestDto
-import com.alpm.server.domain.algorithm.dto.response.SimpleAlgorithmResponseDto
 import org.springframework.stereotype.Service
 import com.alpm.server.domain.codegroup.dao.CodeGroupRepository
 import com.alpm.server.domain.codegroup.dto.request.CodeGroupCreateRequestDto
@@ -131,6 +129,8 @@ class CodeGroupService(
     }
 
     fun searchAllCodeGroups(request: CodeGroupSearchRequestDto): List<SimpleCodeGroupResponseDto> {
+        val user = SecurityContextHolder.getContext().authentication.principal as User
+
         val language = if (request.language == null) {
             null
         } else {
@@ -138,8 +138,14 @@ class CodeGroupService(
         }
         val verified = request.verified
         val keyword = request.keyword
+
         return codeGroupRepository.findCodeGroupsByLanguageAndVerifiedAndKeyword(language, verified, keyword)
-            .map { SimpleCodeGroupResponseDto(it) }
+            .filter {
+                it.visible || it.owner.id!! == user.id!!
+            }
+            .map {
+                SimpleCodeGroupResponseDto(it)
+            }
     }
 
 }
