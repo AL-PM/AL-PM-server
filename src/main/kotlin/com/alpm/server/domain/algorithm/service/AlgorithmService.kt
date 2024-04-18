@@ -11,7 +11,7 @@ import com.alpm.server.domain.user.entity.User
 import com.alpm.server.global.common.model.Language
 import com.alpm.server.global.exception.CustomException
 import com.alpm.server.global.exception.ErrorCode
-import org.hibernate.query.Page
+import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.security.core.context.SecurityContextHolder
@@ -57,7 +57,7 @@ class AlgorithmService(
         return AlgorithmDetailResponseDto(algorithm)
     }
 
-    fun readAllAlgorithms(pageable:Pageable): org.springframework.data.domain.Page<SimpleAlgorithmResponseDto> {
+    fun readAllAlgorithms(pageable:Pageable): Page<SimpleAlgorithmResponseDto> {
         return algorithmRepository.findAll(pageable).map { SimpleAlgorithmResponseDto(it) }
     }
 
