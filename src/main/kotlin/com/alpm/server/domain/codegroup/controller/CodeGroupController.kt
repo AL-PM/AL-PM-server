@@ -1,8 +1,6 @@
 package com.alpm.server.domain.codegroup.controller
 
 
-import com.alpm.server.domain.algorithm.dto.request.AlgorithmSearchRequestDto
-import com.alpm.server.domain.algorithm.dto.response.SimpleAlgorithmResponseDto
 import com.alpm.server.domain.codegroup.dto.request.CodeGroupCreateRequestDto
 import com.alpm.server.domain.codegroup.dto.request.CodeGroupSearchRequestDto
 import com.alpm.server.domain.codegroup.dto.response.CodeGroupDetailResponseDto
@@ -12,7 +10,6 @@ import com.alpm.server.global.validation.ValidationSequence
 import io.swagger.v3.oas.annotations.Operation
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
-import org.springframework.data.util.Streamable
 import org.springframework.http.ResponseEntity
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*

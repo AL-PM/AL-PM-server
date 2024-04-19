@@ -1,8 +1,6 @@
 package com.alpm.server.domain.codegroup.service
 
 import com.alpm.server.domain.algorithm.dao.AlgorithmRepository
-import com.alpm.server.domain.algorithm.dto.request.AlgorithmSearchRequestDto
-import com.alpm.server.domain.algorithm.dto.response.SimpleAlgorithmResponseDto
 import org.springframework.stereotype.Service
 import com.alpm.server.domain.codegroup.dao.CodeGroupRepository
 import com.alpm.server.domain.codegroup.dto.request.CodeGroupCreateRequestDto
@@ -21,11 +19,10 @@ import com.alpm.server.global.exception.CustomException
 import com.alpm.server.global.exception.ErrorCode
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageImpl
+import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable
 import org.springframework.data.repository.findByIdOrNull
-import org.springframework.data.util.Streamable
 import org.springframework.security.core.context.SecurityContextHolder
-import kotlin.math.sign
 
 @Service
 class CodeGroupService(
@@ -83,10 +80,11 @@ class CodeGroupService(
             .map {
                 SimpleCodeGroupResponseDto(it)
             }
-        val start = pageable.offset.toInt()
-        val end = (start + pageable.pageSize).coerceAtMost(codeGroup.size)
+        val pageRequest = PageRequest.of(pageable.pageNumber,pageable.pageSize,pageable.sort)
+        val start = pageRequest.offset.toInt()
+        val end = (start + pageRequest.pageSize).coerceAtMost(codeGroup.size)
         val subCodeGroup = codeGroup.subList(start,end)
-        return PageImpl(subCodeGroup,pageable,codeGroup.size.toLong())
+        return PageImpl(subCodeGroup,pageRequest,codeGroup.size.toLong())
     }
 
     fun readCodeGroupsByUserId(id : Long,pageable:Pageable): Page<SimpleCodeGroupResponseDto> {
@@ -102,10 +100,11 @@ class CodeGroupService(
             .map {
                 SimpleCodeGroupResponseDto(it)
             }
-        val start = pageable.offset.toInt()
-        val end = (start + pageable.pageSize).coerceAtMost(codeGroup.size)
+        val pageRequest = PageRequest.of(pageable.pageNumber,pageable.pageSize,pageable.sort)
+        val start = pageRequest.offset.toInt()
+        val end = (start + pageRequest.pageSize).coerceAtMost(codeGroup.size)
         val subCodeGroup = codeGroup.subList(start, end)
-        return PageImpl(subCodeGroup,pageable,codeGroup.size.toLong())
+        return PageImpl(subCodeGroup,pageRequest,codeGroup.size.toLong())
     }
 
     fun readAllCodeGroupByGroupId(id: Long): CodeGroupDetailResponseDto {
@@ -116,10 +115,12 @@ class CodeGroupService(
     fun readAllOwnedCodeGroupByUserId(id: Long,pageable: Pageable): Page<SimpleCodeGroupResponseDto> {
         val user = userRepository.findByIdOrNull(id) ?: throw CustomException(ErrorCode.USER_NOT_FOUND)
         val codeGroup = user.ownedCodeGroupList.map { SimpleCodeGroupResponseDto(it) }
-        val start = pageable.offset.toInt()
-        val end = (start + pageable.pageSize).coerceAtMost(codeGroup.size)
+
+        val pageRequest = PageRequest.of(pageable.pageNumber,pageable.pageSize,pageable.sort)
+        val start = pageRequest.offset.toInt()
+        val end = (start + pageRequest.pageSize).coerceAtMost(codeGroup.size)
         val subCodeGroup = codeGroup.subList(start,end)
-        return PageImpl(subCodeGroup,pageable,codeGroup.size.toLong())
+        return PageImpl(subCodeGroup,pageRequest,codeGroup.size.toLong())
     }
 
     fun importAlgorithmToCodeGroup(codeGroupId: Long, algorithmId: Long) {
@@ -156,10 +157,11 @@ class CodeGroupService(
         val codeGroup = codeGroupRepository.findCodeGroupsByLanguageAndVerifiedAndKeyword(language, verified, keyword)
             .map { SimpleCodeGroupResponseDto(it) }
 
-        val start = pageable.offset.toInt()
-        val end = (start+pageable.pageSize).coerceAtMost(codeGroup.size)
+        val pageRequest = PageRequest.of(pageable.pageNumber,pageable.pageSize,pageable.sort)
+        val start = pageRequest.offset.toInt()
+        val end = (start+pageRequest.pageSize).coerceAtMost(codeGroup.size)
         val subCodeGroup = codeGroup.subList(start,end)
-        return PageImpl(subCodeGroup,pageable,codeGroup.size.toLong())
+        return PageImpl(subCodeGroup,pageRequest,codeGroup.size.toLong())
     }
 
 }
