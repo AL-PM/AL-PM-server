@@ -19,8 +19,13 @@ import com.alpm.server.global.common.relation.dao.UserCodeGroupRepository
 import com.alpm.server.global.common.relation.entity.CodeGroupAlgorithm
 import com.alpm.server.global.exception.CustomException
 import com.alpm.server.global.exception.ErrorCode
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.PageImpl
+import org.springframework.data.domain.Pageable
 import org.springframework.data.repository.findByIdOrNull
+import org.springframework.data.util.Streamable
 import org.springframework.security.core.context.SecurityContextHolder
+import kotlin.math.sign
 
 @Service
 class CodeGroupService(
@@ -69,23 +74,25 @@ class CodeGroupService(
         )
     }
 
-    fun readAllCodeGroups(): List<SimpleCodeGroupResponseDto> {
+    fun readAllCodeGroups(pageable: Pageable): Page<SimpleCodeGroupResponseDto> {
         val user = SecurityContextHolder.getContext().authentication.principal as User
-
-        return codeGroupRepository.findAll()
+        val codeGroup = codeGroupRepository.findAll()
             .filter {
                 it.visible || it.owner.id == user.id
             }
             .map {
                 SimpleCodeGroupResponseDto(it)
             }
+        val start = pageable.offset.toInt()
+        val end = (start + pageable.pageSize).coerceAtMost(codeGroup.size)
+        val subCodeGroup = codeGroup.subList(start,end)
+        return PageImpl(subCodeGroup,pageable,codeGroup.size.toLong())
     }
 
-    fun readCodeGroupsByUserId(id : Long): List<SimpleCodeGroupResponseDto> {
+    fun readCodeGroupsByUserId(id : Long,pageable:Pageable): Page<SimpleCodeGroupResponseDto> {
         val currentUser = SecurityContextHolder.getContext().authentication.principal as User
         val targetUser = userRepository.findByIdOrNull(id) ?: throw CustomException(ErrorCode.USER_NOT_FOUND)
-
-        return targetUser.codeGroupList
+        val codeGroup = targetUser.codeGroupList
             .map {
                 it.codeGroup
             }
@@ -95,6 +102,10 @@ class CodeGroupService(
             .map {
                 SimpleCodeGroupResponseDto(it)
             }
+        val start = pageable.offset.toInt()
+        val end = (start + pageable.pageSize).coerceAtMost(codeGroup.size)
+        val subCodeGroup = codeGroup.subList(start, end)
+        return PageImpl(subCodeGroup,pageable,codeGroup.size.toLong())
     }
 
     fun readAllCodeGroupByGroupId(id: Long): CodeGroupDetailResponseDto {
@@ -102,9 +113,13 @@ class CodeGroupService(
         return CodeGroupDetailResponseDto(codeGroup)
     }
 
-    fun readAllOwnedCodeGroupByUserId(id: Long): List<SimpleCodeGroupResponseDto> {
+    fun readAllOwnedCodeGroupByUserId(id: Long,pageable: Pageable): Page<SimpleCodeGroupResponseDto> {
         val user = userRepository.findByIdOrNull(id) ?: throw CustomException(ErrorCode.USER_NOT_FOUND)
-        return user.ownedCodeGroupList.map { SimpleCodeGroupResponseDto(it) }
+        val codeGroup = user.ownedCodeGroupList.map { SimpleCodeGroupResponseDto(it) }
+        val start = pageable.offset.toInt()
+        val end = (start + pageable.pageSize).coerceAtMost(codeGroup.size)
+        val subCodeGroup = codeGroup.subList(start,end)
+        return PageImpl(subCodeGroup,pageable,codeGroup.size.toLong())
     }
 
     fun importAlgorithmToCodeGroup(codeGroupId: Long, algorithmId: Long) {
@@ -130,7 +145,7 @@ class CodeGroupService(
         ))
     }
 
-    fun searchAllCodeGroups(request: CodeGroupSearchRequestDto): List<SimpleCodeGroupResponseDto> {
+    fun searchAllCodeGroups(request: CodeGroupSearchRequestDto,pageable: Pageable): Page<SimpleCodeGroupResponseDto> {
         val language = if (request.language == null) {
             null
         } else {
@@ -138,8 +153,13 @@ class CodeGroupService(
         }
         val verified = request.verified
         val keyword = request.keyword
-        return codeGroupRepository.findCodeGroupsByLanguageAndVerifiedAndKeyword(language, verified, keyword)
+        val codeGroup = codeGroupRepository.findCodeGroupsByLanguageAndVerifiedAndKeyword(language, verified, keyword)
             .map { SimpleCodeGroupResponseDto(it) }
+
+        val start = pageable.offset.toInt()
+        val end = (start+pageable.pageSize).coerceAtMost(codeGroup.size)
+        val subCodeGroup = codeGroup.subList(start,end)
+        return PageImpl(subCodeGroup,pageable,codeGroup.size.toLong())
     }
 
 }

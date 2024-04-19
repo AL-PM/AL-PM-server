@@ -60,16 +60,15 @@ class AlgorithmController(
 
     @Operation(summary = "특정 User(Owner)가 작성한 Algorithm 전체 조회")
     @GetMapping("/owner/{id}")
-    fun readAllOwnedAlgorithmsByUserId(
-        @PathVariable("id") id: Long, pageable: Pageable
-    ): ResponseEntity<Page<SimpleAlgorithmResponseDto>> {
+    fun readAllOwnedAlgorithmsByUserId(@PathVariable("id") id: Long, pageable: Pageable): ResponseEntity<Page<SimpleAlgorithmResponseDto>> {
         return ResponseEntity.ok().body(algorithmService.readAllOwnedAlgorithmsByUserId(id,pageable))
     }
 
     @Operation(summary = "Algorithm 검색")
     @GetMapping("/search")
     fun searchAllAlgorithm(
-        @ModelAttribute @Validated(value = [ValidationSequence::class]) request: AlgorithmSearchRequestDto, pageable: Pageable
+        @ModelAttribute @Validated(value = [ValidationSequence::class]) request: AlgorithmSearchRequestDto,
+        pageable: Pageable
     ): ResponseEntity<Page<SimpleAlgorithmResponseDto>> {
         return ResponseEntity.ok().body(algorithmService.searchAllAlgorithms(request,pageable))
     }
