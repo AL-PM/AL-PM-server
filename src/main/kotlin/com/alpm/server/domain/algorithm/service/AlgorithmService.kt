@@ -73,16 +73,16 @@ class AlgorithmService(
                 it.visible || it.owner.id!! == user.id!!
             }
 
-        val set = HashSet<Algorithm>()
+        val algorithmSet = HashSet<Algorithm>()
         for (codeGroup in codeGroupList) {
-            set.addAll(codeGroup.algorithmList.map { it.algorithm })
+            algorithmSet.addAll(codeGroup.algorithmList.map { it.algorithm })
         }
 
         val start = pageable.offset.toInt()
-        val end = (start + pageable.pageSize).coerceAtMost(codeGroupList.size)
+        val end = (start + pageable.pageSize).coerceAtMost(algorithmSet.size)
         val subCodeGroupList = codeGroupList.toList().subList(start, end)
 
-        return PageImpl(subCodeGroupList,pageable,set.size.toLong())
+        return PageImpl(subCodeGroupList,pageable,algorithmSet.size.toLong())
     }
 
     fun readAllOwnedAlgorithmsByUserId(id:Long, pageable: Pageable): Page<SimpleAlgorithmResponseDto> {
