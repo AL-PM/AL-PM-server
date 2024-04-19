@@ -6,7 +6,6 @@ import com.alpm.server.domain.algorithm.dto.request.AlgorithmSearchRequestDto
 import com.alpm.server.domain.algorithm.dto.response.AlgorithmDetailResponseDto
 import com.alpm.server.domain.algorithm.dto.response.SimpleAlgorithmResponseDto
 import com.alpm.server.domain.algorithm.entity.Algorithm
-import com.alpm.server.domain.codegroup.entity.CodeGroup
 import com.alpm.server.domain.user.dao.UserRepository
 import com.alpm.server.domain.user.entity.User
 import com.alpm.server.global.common.model.Language
@@ -14,6 +13,7 @@ import com.alpm.server.global.exception.CustomException
 import com.alpm.server.global.exception.ErrorCode
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageImpl
+import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.security.core.context.SecurityContextHolder
@@ -63,7 +63,7 @@ class AlgorithmService(
         return algorithmRepository.findAll(pageable).map { SimpleAlgorithmResponseDto(it) }
     }
 
-    fun readAllAlgorithmsByUserId(id: Long,pageable: Pageable): Page<CodeGroup> {
+    fun readAllAlgorithmsByUserId(id: Long,pageable: Pageable): Page<SimpleAlgorithmResponseDto> {
         val user = userRepository.findByIdOrNull(id) ?: throw CustomException(ErrorCode.USER_NOT_FOUND)
         val codeGroupList = user.codeGroupList
             .map {
@@ -78,22 +78,24 @@ class AlgorithmService(
             algorithmSet.addAll(codeGroup.algorithmList.map { it.algorithm })
         }
 
-        val start = pageable.offset.toInt()
-        val end = (start + pageable.pageSize).coerceAtMost(algorithmSet.size)
-        val subCodeGroupList = codeGroupList.toList().subList(start, end)
+        val pageRequest = PageRequest.of(pageable.pageNumber,pageable.pageSize,pageable.sort)
+        val start = pageRequest.offset.toInt()
+        val end = (start + pageRequest.pageSize).coerceAtMost(algorithmSet.size)
+        val subAlgorithmList = algorithmSet.toList().subList(start, end).map { SimpleAlgorithmResponseDto(it) }
 
-        return PageImpl(subCodeGroupList,pageable,algorithmSet.size.toLong())
+        return PageImpl(subAlgorithmList,pageRequest,algorithmSet.size.toLong())
     }
 
     fun readAllOwnedAlgorithmsByUserId(id:Long, pageable: Pageable): Page<SimpleAlgorithmResponseDto> {
         val user = userRepository.findByIdOrNull(id) ?: throw CustomException(ErrorCode.USER_NOT_FOUND)
         val ownedAlgorithmList = user.ownedAlgorithmList.map { SimpleAlgorithmResponseDto(it) }
 
-        val start = pageable.offset.toInt()
-        val end = (start + pageable.pageSize).coerceAtMost(ownedAlgorithmList.size)
-        val subOwnedAlgorithmList = ownedAlgorithmList.toList().subList(start, end)
+        val pageRequest = PageRequest.of(pageable.pageNumber,pageable.pageSize,pageable.sort)
+        val start = pageRequest.offset.toInt()
+        val end = (start + pageRequest.pageSize).coerceAtMost(ownedAlgorithmList.size)
+        val subOwnedAlgorithmList = ownedAlgorithmList.subList(start, end)
 
-        return PageImpl(subOwnedAlgorithmList,pageable,ownedAlgorithmList.size.toLong())
+        return PageImpl(subOwnedAlgorithmList,pageRequest,ownedAlgorithmList.size.toLong())
     }
 
     fun searchAllAlgorithms(request: AlgorithmSearchRequestDto,pageable: Pageable): Page<SimpleAlgorithmResponseDto> {
@@ -108,11 +110,12 @@ class AlgorithmService(
         val algorithmList = algorithmRepository.findAlgorithmsByLanguageAndVerifiedAndKeyword(language, verified, keyword)
             .map { SimpleAlgorithmResponseDto(it) }
 
-        val start = pageable.offset.toInt()
-        val end = (start + pageable.pageSize).coerceAtMost(algorithmList.size)
+        val pageRequest = PageRequest.of(pageable.pageNumber,pageable.pageSize,pageable.sort)
+        val start = pageRequest.offset.toInt()
+        val end = (start + pageRequest.pageSize).coerceAtMost(algorithmList.size)
         val subAlgorithmList = algorithmList.subList(start, end)
 
-        return PageImpl(subAlgorithmList,pageable,algorithmList.size.toLong())
+        return PageImpl(subAlgorithmList,pageRequest,algorithmList.size.toLong())
     }
 
 }
