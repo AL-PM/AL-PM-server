@@ -6,12 +6,14 @@ import com.alpm.server.domain.algorithm.dto.request.AlgorithmSearchRequestDto
 import com.alpm.server.domain.algorithm.dto.response.AlgorithmDetailResponseDto
 import com.alpm.server.domain.algorithm.dto.response.SimpleAlgorithmResponseDto
 import com.alpm.server.domain.algorithm.entity.Algorithm
+import com.alpm.server.domain.codegroup.entity.CodeGroup
 import com.alpm.server.domain.user.dao.UserRepository
 import com.alpm.server.domain.user.entity.User
 import com.alpm.server.global.common.model.Language
 import com.alpm.server.global.exception.CustomException
 import com.alpm.server.global.exception.ErrorCode
 import org.springframework.data.domain.Page
+import org.springframework.data.domain.PageImpl
 import org.springframework.data.domain.Pageable
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.security.core.context.SecurityContextHolder
@@ -61,7 +63,7 @@ class AlgorithmService(
         return algorithmRepository.findAll(pageable).map { SimpleAlgorithmResponseDto(it) }
     }
 
-    fun readAllAlgorithmsByUserId(id: Long): List<SimpleAlgorithmResponseDto> {
+    fun readAllAlgorithmsByUserId(id: Long,pageable: Pageable): Page<CodeGroup> {
         val user = userRepository.findByIdOrNull(id) ?: throw CustomException(ErrorCode.USER_NOT_FOUND)
         val codeGroupList = user.codeGroupList
             .map {
@@ -76,15 +78,25 @@ class AlgorithmService(
             set.addAll(codeGroup.algorithmList.map { it.algorithm })
         }
 
-        return set.map { SimpleAlgorithmResponseDto(it) }
+        val start = pageable.offset.toInt()
+        val end = (start + pageable.pageSize).coerceAtMost(codeGroupList.size)
+        val subCodeGroupList = codeGroupList.toList().subList(start, end)
+
+        return PageImpl(subCodeGroupList,pageable,set.size.toLong())
     }
 
-    fun readAllOwnedAlgorithmsByUserId(id:Long): List<SimpleAlgorithmResponseDto> {
+    fun readAllOwnedAlgorithmsByUserId(id:Long, pageable: Pageable): Page<SimpleAlgorithmResponseDto> {
         val user = userRepository.findByIdOrNull(id) ?: throw CustomException(ErrorCode.USER_NOT_FOUND)
-        return user.ownedAlgorithmList.map { SimpleAlgorithmResponseDto(it) }
+        val ownedAlgorithmList = user.ownedAlgorithmList.map { SimpleAlgorithmResponseDto(it) }
+
+        val start = pageable.offset.toInt()
+        val end = (start + pageable.pageSize).coerceAtMost(ownedAlgorithmList.size)
+        val subOwnedAlgorithmList = ownedAlgorithmList.toList().subList(start, end)
+
+        return PageImpl(subOwnedAlgorithmList,pageable,ownedAlgorithmList.size.toLong())
     }
 
-    fun searchAllAlgorithms(request: AlgorithmSearchRequestDto): List<SimpleAlgorithmResponseDto> {
+    fun searchAllAlgorithms(request: AlgorithmSearchRequestDto,pageable: Pageable): Page<SimpleAlgorithmResponseDto> {
         val language = if (request.language == null) {
             null
         } else {
@@ -93,8 +105,14 @@ class AlgorithmService(
         }
         val verified = request.verified
         val keyword = request.keyword
-        return algorithmRepository.findAlgorithmsByLanguageAndVerifiedAndKeyword(language, verified, keyword)
+        val algorithmList = algorithmRepository.findAlgorithmsByLanguageAndVerifiedAndKeyword(language, verified, keyword)
             .map { SimpleAlgorithmResponseDto(it) }
+
+        val start = pageable.offset.toInt()
+        val end = (start + pageable.pageSize).coerceAtMost(algorithmList.size)
+        val subAlgorithmList = algorithmList.subList(start, end)
+
+        return PageImpl(subAlgorithmList,pageable,algorithmList.size.toLong())
     }
 
 }
