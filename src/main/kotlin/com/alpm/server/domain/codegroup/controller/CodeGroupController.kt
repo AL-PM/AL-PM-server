@@ -10,6 +10,8 @@ import com.alpm.server.global.validation.ValidationSequence
 import io.swagger.v3.oas.annotations.Operation
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
+import org.springframework.data.domain.Sort
+import org.springframework.data.web.PageableDefault
 import org.springframework.http.ResponseEntity
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
@@ -37,13 +39,18 @@ class CodeGroupController(
 
     @Operation(summary = "CodeGroup 전체 조회")
     @GetMapping("")
-    fun readAllCodeGroups(pageable: Pageable): ResponseEntity<Page<SimpleCodeGroupResponseDto>> {
+    fun readAllCodeGroups(
+        @PageableDefault(page = 0, size = 10, sort = ["createdAt"], direction = Sort.Direction.ASC) pageable: Pageable
+    ): ResponseEntity<Page<SimpleCodeGroupResponseDto>> {
         return ResponseEntity.ok().body(codeGroupService.readAllCodeGroups(pageable))
     }
 
     @Operation(summary = "특정 User의 CodeGroup 전체 조회")
     @GetMapping("/user/{id}")
-    fun readCodeGroupsByUserId(@PathVariable("id") id: Long, pageable: Pageable): ResponseEntity<Page<SimpleCodeGroupResponseDto>> {
+    fun readCodeGroupsByUserId(
+        @PathVariable("id") id: Long,
+        @PageableDefault(page = 0, size = 10, sort = ["createdAt"], direction = Sort.Direction.ASC) pageable: Pageable
+    ): ResponseEntity<Page<SimpleCodeGroupResponseDto>> {
         return ResponseEntity.ok().body(codeGroupService.readCodeGroupsByUserId(id,pageable))
     }
 
@@ -55,7 +62,10 @@ class CodeGroupController(
 
     @Operation(summary = "특정 User(Owner)가 작성한 CodeGroup 전체 조회")
     @GetMapping("/owner/{id}")
-    fun readAllOwnedCodeGroupByUserId(@PathVariable("id") id: Long,pageable: Pageable): ResponseEntity<Page<SimpleCodeGroupResponseDto>> {
+    fun readAllOwnedCodeGroupByUserId(
+        @PathVariable("id") id: Long,
+        @PageableDefault(page = 0, size = 10, sort = ["createdAt"], direction = Sort.Direction.ASC) pageable: Pageable
+    ): ResponseEntity<Page<SimpleCodeGroupResponseDto>> {
         return ResponseEntity.ok().body(codeGroupService.readAllOwnedCodeGroupByUserId(id,pageable))
     }
 
@@ -72,7 +82,7 @@ class CodeGroupController(
     @GetMapping("/search")
     fun searchAllAlgorithm(
         @ModelAttribute @Validated(value = [ValidationSequence::class]) request: CodeGroupSearchRequestDto,
-        pageable: Pageable
+        @PageableDefault(page = 0, size = 10, sort = ["createdAt"], direction = Sort.Direction.ASC) pageable: Pageable
     ): ResponseEntity<Page<SimpleCodeGroupResponseDto>> {
         return ResponseEntity.ok().body(codeGroupService.searchAllCodeGroups(request,pageable))
     }
