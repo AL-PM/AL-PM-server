@@ -101,11 +101,11 @@ class CodeGroupService(
             .map {
                 SimpleCodeGroupResponseDto(it)
             }
-        val pageRequest = PageRequest.of(pageable.pageNumber,pageable.pageSize,pageable.sort)
-        val start = pageRequest.offset.toInt()
-        val end = (start + pageRequest.pageSize).coerceAtMost(codeGroup.size)
+
+        val start = pageable.offset.toInt()
+        val end = (start + pageable.pageSize).coerceAtMost(codeGroup.size)
         val subCodeGroup = codeGroup.subList(start, end)
-        return PageImpl(subCodeGroup,pageRequest,codeGroup.size.toLong())
+        return PageImpl(subCodeGroup,pageable,codeGroup.size.toLong())
     }
 
     fun readCodeGroupByGroupId(id: Long): CodeGroupDetailResponseDto {
@@ -158,11 +158,10 @@ class CodeGroupService(
         val codeGroup = codeGroupRepository.findCodeGroupsByLanguageAndVerifiedAndKeyword(language, verified, keyword)
             .map { SimpleCodeGroupResponseDto(it) }
 
-        val pageRequest = PageRequest.of(pageable.pageNumber,pageable.pageSize,pageable.sort)
-        val start = pageRequest.offset.toInt()
-        val end = (start+pageRequest.pageSize).coerceAtMost(codeGroup.size)
+        val start = pageable.offset.toInt()
+        val end = (start+pageable.pageSize).coerceAtMost(codeGroup.size)
         val subCodeGroup = codeGroup.subList(start,end)
-        return PageImpl(subCodeGroup,pageRequest,codeGroup.size.toLong())
+        return PageImpl(subCodeGroup,pageable,codeGroup.size.toLong())
     }
 
 }

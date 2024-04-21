@@ -78,24 +78,22 @@ class AlgorithmService(
             algorithmSet.addAll(codeGroup.algorithmList.map { it.algorithm })
         }
 
-        val pageRequest = PageRequest.of(pageable.pageNumber,pageable.pageSize,pageable.sort)
-        val start = pageRequest.offset.toInt()
-        val end = (start + pageRequest.pageSize).coerceAtMost(algorithmSet.size)
+        val start = pageable.offset.toInt()
+        val end = (start + pageable.pageSize).coerceAtMost(algorithmSet.size)
         val subAlgorithmList = algorithmSet.toList().subList(start, end).map { SimpleAlgorithmResponseDto(it) }
 
-        return PageImpl(subAlgorithmList,pageRequest,algorithmSet.size.toLong())
+        return PageImpl(subAlgorithmList,pageable,algorithmSet.size.toLong())
     }
 
     fun readAllOwnedAlgorithmsByUserId(id:Long, pageable: Pageable): Page<SimpleAlgorithmResponseDto> {
         val user = userRepository.findByIdOrNull(id) ?: throw CustomException(ErrorCode.USER_NOT_FOUND)
         val ownedAlgorithmList = user.ownedAlgorithmList.map { SimpleAlgorithmResponseDto(it) }
 
-        val pageRequest = PageRequest.of(pageable.pageNumber,pageable.pageSize,pageable.sort)
-        val start = pageRequest.offset.toInt()
-        val end = (start + pageRequest.pageSize).coerceAtMost(ownedAlgorithmList.size)
+        val start = pageable.offset.toInt()
+        val end = (start + pageable.pageSize).coerceAtMost(ownedAlgorithmList.size)
         val subOwnedAlgorithmList = ownedAlgorithmList.subList(start, end)
 
-        return PageImpl(subOwnedAlgorithmList,pageRequest,ownedAlgorithmList.size.toLong())
+        return PageImpl(subOwnedAlgorithmList,pageable,ownedAlgorithmList.size.toLong())
     }
 
     fun searchAllAlgorithms(request: AlgorithmSearchRequestDto,pageable: Pageable): Page<SimpleAlgorithmResponseDto> {
@@ -107,15 +105,14 @@ class AlgorithmService(
         }
         val verified = request.verified
         val keyword = request.keyword
-        val algorithmList = algorithmRepository.findAlgorithmsByLanguageAndVerifiedAndKeyword(language, verified, keyword)
+        val algorithmList = algorithmRepository.findAlgorithmsByLanguageAndVerifiedAndKeyword(language, verified, keyword, pageable)
             .map { SimpleAlgorithmResponseDto(it) }
 
-        val pageRequest = PageRequest.of(pageable.pageNumber,pageable.pageSize,pageable.sort)
-        val start = pageRequest.offset.toInt()
-        val end = (start + pageRequest.pageSize).coerceAtMost(algorithmList.size)
+        val start = pageable.offset.toInt()
+        val end = (start + pageable.pageSize).coerceAtMost(algorithmList.size)
         val subAlgorithmList = algorithmList.subList(start, end)
 
-        return PageImpl(subAlgorithmList,pageRequest,algorithmList.size.toLong())
+        return PageImpl(subAlgorithmList,pageable,algorithmList.size.toLong())
     }
 
 }
