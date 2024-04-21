@@ -57,7 +57,7 @@ class CodeGroupController(
     @Operation(summary = "CodeGroup 단일 조회")
     @GetMapping("/{id}")
     fun readCodeGroupById(@PathVariable("id") id: Long): ResponseEntity<Any> {
-        return ResponseEntity.ok().body(codeGroupService.readAllCodeGroupByGroupId(id))
+        return ResponseEntity.ok().body(codeGroupService.readCodeGroupByGroupId(id))
     }
 
     @Operation(summary = "특정 User(Owner)가 작성한 CodeGroup 전체 조회")

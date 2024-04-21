@@ -1,7 +1,10 @@
 package com.alpm.server.domain.codegroup.dao
 
 import com.alpm.server.domain.codegroup.entity.CodeGroup
+import com.alpm.server.domain.user.entity.User
 import com.alpm.server.global.common.model.Language
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
 import org.springframework.stereotype.Repository
@@ -14,5 +17,7 @@ interface CodeGroupRepository: JpaRepository<CodeGroup, Long> {
             "and (:verified is null or c.verified = :verified) " +
             "and (:keyword is null or c.owner.name LIKE CONCAT('%', :keyword, '%') or c.name LIKE CONCAT('%', :keyword, '%'))")
     fun findCodeGroupsByLanguageAndVerifiedAndKeyword(language: Language?, verified: Boolean?, keyword: String?): List<CodeGroup>
+
+    fun findByOwner(owner: User, pageable: Pageable): Page<CodeGroup>
 
 }

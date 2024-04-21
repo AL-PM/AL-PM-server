@@ -23,6 +23,7 @@ import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.security.core.context.SecurityContextHolder
+import java.util.stream.Collectors
 
 @Service
 class CodeGroupService(
@@ -73,21 +74,21 @@ class CodeGroupService(
 
     fun readAllCodeGroups(pageable: Pageable): Page<SimpleCodeGroupResponseDto> {
         val user = SecurityContextHolder.getContext().authentication.principal as User
-        val codeGroup = codeGroupRepository.findAll()
+
+        val codeGroup = codeGroupRepository.findAll(pageable)
             .filter {
                 it.visible || it.owner.id == user.id
             }
             .map {
                 SimpleCodeGroupResponseDto(it)
             }
-        val pageRequest = PageRequest.of(pageable.pageNumber,pageable.pageSize,pageable.sort)
-        val start = pageRequest.offset.toInt()
-        val end = (start + pageRequest.pageSize).coerceAtMost(codeGroup.size)
-        val subCodeGroup = codeGroup.subList(start,end)
-        return PageImpl(subCodeGroup,pageRequest,codeGroup.size.toLong())
+            .toList()
+
+        return PageImpl(codeGroup, pageable, codeGroup.size.toLong())
     }
 
-    fun readCodeGroupsByUserId(id : Long,pageable:Pageable): Page<SimpleCodeGroupResponseDto> {
+    fun readCodeGroupsByUserId(id : Long, pageable: Pageable): Page<SimpleCodeGroupResponseDto> {
+        // todo: Pageable 수정
         val currentUser = SecurityContextHolder.getContext().authentication.principal as User
         val targetUser = userRepository.findByIdOrNull(id) ?: throw CustomException(ErrorCode.USER_NOT_FOUND)
         val codeGroup = targetUser.codeGroupList
@@ -107,20 +108,19 @@ class CodeGroupService(
         return PageImpl(subCodeGroup,pageRequest,codeGroup.size.toLong())
     }
 
-    fun readAllCodeGroupByGroupId(id: Long): CodeGroupDetailResponseDto {
+    fun readCodeGroupByGroupId(id: Long): CodeGroupDetailResponseDto {
+        // todo: CodeGroup 내 Algorithm List -> Page
         val codeGroup = codeGroupRepository.findByIdOrNull(id) ?: throw CustomException(ErrorCode.CODE_GROUP_NOT_FOUND)
         return CodeGroupDetailResponseDto(codeGroup)
     }
 
-    fun readAllOwnedCodeGroupByUserId(id: Long,pageable: Pageable): Page<SimpleCodeGroupResponseDto> {
+    fun readAllOwnedCodeGroupByUserId(id: Long, pageable: Pageable): Page<SimpleCodeGroupResponseDto> {
         val user = userRepository.findByIdOrNull(id) ?: throw CustomException(ErrorCode.USER_NOT_FOUND)
-        val codeGroup = user.ownedCodeGroupList.map { SimpleCodeGroupResponseDto(it) }
+        val codeGroup = codeGroupRepository.findByOwner(user, pageable)
+            .map { SimpleCodeGroupResponseDto(it) }
+            .toList()
 
-        val pageRequest = PageRequest.of(pageable.pageNumber,pageable.pageSize,pageable.sort)
-        val start = pageRequest.offset.toInt()
-        val end = (start + pageRequest.pageSize).coerceAtMost(codeGroup.size)
-        val subCodeGroup = codeGroup.subList(start,end)
-        return PageImpl(subCodeGroup,pageRequest,codeGroup.size.toLong())
+        return PageImpl(codeGroup, pageable, codeGroup.size.toLong())
     }
 
     fun importAlgorithmToCodeGroup(codeGroupId: Long, algorithmId: Long) {
@@ -146,7 +146,8 @@ class CodeGroupService(
         ))
     }
 
-    fun searchAllCodeGroups(request: CodeGroupSearchRequestDto,pageable: Pageable): Page<SimpleCodeGroupResponseDto> {
+    fun searchAllCodeGroups(request: CodeGroupSearchRequestDto, pageable: Pageable): Page<SimpleCodeGroupResponseDto> {
+        // todo: Pageable 수정
         val language = if (request.language == null) {
             null
         } else {
