@@ -19,11 +19,9 @@ import com.alpm.server.global.exception.CustomException
 import com.alpm.server.global.exception.ErrorCode
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageImpl
-import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.security.core.context.SecurityContextHolder
-import java.util.stream.Collectors
 
 @Service
 class CodeGroupService(
@@ -155,13 +153,9 @@ class CodeGroupService(
         }
         val verified = request.verified
         val keyword = request.keyword
-        val codeGroup = codeGroupRepository.findCodeGroupsByLanguageAndVerifiedAndKeyword(language, verified, keyword)
-            .map { SimpleCodeGroupResponseDto(it) }
+        val codeGroup = codeGroupRepository.findCodeGroupsByLanguageAndVerifiedAndKeyword(language, verified, keyword, pageable)
 
-        val start = pageable.offset.toInt()
-        val end = (start+pageable.pageSize).coerceAtMost(codeGroup.size)
-        val subCodeGroup = codeGroup.subList(start,end)
-        return PageImpl(subCodeGroup,pageable,codeGroup.size.toLong())
+        return codeGroup.map { SimpleCodeGroupResponseDto(it) }
     }
 
 }

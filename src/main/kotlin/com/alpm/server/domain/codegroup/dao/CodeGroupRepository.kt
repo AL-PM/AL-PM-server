@@ -16,7 +16,7 @@ interface CodeGroupRepository: JpaRepository<CodeGroup, Long> {
             "WHERE (:language is null or c.language = :language) " +
             "and (:verified is null or c.verified = :verified) " +
             "and (:keyword is null or c.owner.name LIKE CONCAT('%', :keyword, '%') or c.name LIKE CONCAT('%', :keyword, '%'))")
-    fun findCodeGroupsByLanguageAndVerifiedAndKeyword(language: Language?, verified: Boolean?, keyword: String?): List<CodeGroup>
+    fun findCodeGroupsByLanguageAndVerifiedAndKeyword(language: Language?, verified: Boolean?, keyword: String?,pageable: Pageable): Page<CodeGroup>
 
     fun findByOwner(owner: User, pageable: Pageable): Page<CodeGroup>
 
