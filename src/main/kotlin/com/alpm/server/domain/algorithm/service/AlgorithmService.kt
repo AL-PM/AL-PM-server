@@ -13,7 +13,6 @@ import com.alpm.server.global.exception.CustomException
 import com.alpm.server.global.exception.ErrorCode
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageImpl
-import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.security.core.context.SecurityContextHolder
@@ -87,13 +86,9 @@ class AlgorithmService(
 
     fun readAllOwnedAlgorithmsByUserId(id:Long, pageable: Pageable): Page<SimpleAlgorithmResponseDto> {
         val user = userRepository.findByIdOrNull(id) ?: throw CustomException(ErrorCode.USER_NOT_FOUND)
-        val ownedAlgorithmList = user.ownedAlgorithmList.map { SimpleAlgorithmResponseDto(it) }
+        val algorithmList = algorithmRepository.findAlgorithmByOwner(user,pageable)
 
-        val start = pageable.offset.toInt()
-        val end = (start + pageable.pageSize).coerceAtMost(ownedAlgorithmList.size)
-        val subOwnedAlgorithmList = ownedAlgorithmList.subList(start, end)
-
-        return PageImpl(subOwnedAlgorithmList,pageable,ownedAlgorithmList.size.toLong())
+        return algorithmList.map { SimpleAlgorithmResponseDto(it)  }
     }
 
     fun searchAllAlgorithms(request: AlgorithmSearchRequestDto,pageable: Pageable): Page<SimpleAlgorithmResponseDto> {
@@ -106,13 +101,8 @@ class AlgorithmService(
         val verified = request.verified
         val keyword = request.keyword
         val algorithmList = algorithmRepository.findAlgorithmsByLanguageAndVerifiedAndKeyword(language, verified, keyword, pageable)
-            .map { SimpleAlgorithmResponseDto(it) }
 
-        val start = pageable.offset.toInt()
-        val end = (start + pageable.pageSize).coerceAtMost(algorithmList.size)
-        val subAlgorithmList = algorithmList.subList(start, end)
-
-        return PageImpl(subAlgorithmList,pageable,algorithmList.size.toLong())
+        return algorithmList.map { SimpleAlgorithmResponseDto(it) }
     }
 
 }
