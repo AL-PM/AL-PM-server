@@ -115,10 +115,8 @@ class CodeGroupService(
     fun readAllOwnedCodeGroupByUserId(id: Long, pageable: Pageable): Page<SimpleCodeGroupResponseDto> {
         val user = userRepository.findByIdOrNull(id) ?: throw CustomException(ErrorCode.USER_NOT_FOUND)
         val codeGroup = codeGroupRepository.findByOwner(user, pageable)
-            .map { SimpleCodeGroupResponseDto(it) }
-            .toList()
 
-        return PageImpl(codeGroup, pageable, codeGroup.size.toLong())
+        return codeGroup.map { SimpleCodeGroupResponseDto(it) }
     }
 
     fun importAlgorithmToCodeGroup(codeGroupId: Long, algorithmId: Long) {
@@ -145,7 +143,6 @@ class CodeGroupService(
     }
 
     fun searchAllCodeGroups(request: CodeGroupSearchRequestDto, pageable: Pageable): Page<SimpleCodeGroupResponseDto> {
-        // todo: Pageable 수정
         val language = if (request.language == null) {
             null
         } else {
