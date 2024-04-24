@@ -55,10 +55,9 @@ class AlgorithmController(
     @Operation(summary = "특정 유저의 Algorithm 전체 조회")
     @GetMapping("/user/{id}")
     fun readAllAlgorithmsByUserId(
-        @PathVariable("id") id: Long,
-        @PageableDefault(page = 0, size = 10, sort = ["createdAt"], direction = Sort.Direction.ASC) pageable: Pageable
-    ): ResponseEntity<Page<SimpleAlgorithmResponseDto>> {
-        return ResponseEntity.ok().body(algorithmService.readAllAlgorithmsByUserId(id,pageable))
+        @PathVariable("id") id: Long
+    ): ResponseEntity<List<SimpleAlgorithmResponseDto>> {
+        return ResponseEntity.ok().body(algorithmService.readAllAlgorithmsByUserId(id))
     }
 
     @Operation(summary = "특정 User(Owner)가 작성한 Algorithm 전체 조회")
