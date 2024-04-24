@@ -127,7 +127,8 @@ class CodeGroupService(
         ))
     }
 
-    fun searchAllCodeGroups(request: CodeGroupSearchRequestDto, pageable: Pageable): Page<SimpleCodeGroupResponseDto> {
+fun searchAllCodeGroups(request: CodeGroupSearchRequestDto, pageable: Pageable): Page<SimpleCodeGroupResponseDto> {
+        val user = SecurityContextHolder.getContext().authentication.principal as User
         val language = if (request.language == null) {
             null
         } else {
@@ -136,8 +137,15 @@ class CodeGroupService(
         val verified = request.verified
         val keyword = request.keyword
         val codeGroup = codeGroupRepository.findCodeGroupsByLanguageAndVerifiedAndKeyword(language, verified, keyword, pageable)
+            .filter {
+                it.visible || it.owner.id!! == user.id!!
+            }
+            .map {
+                SimpleCodeGroupResponseDto(it)
+            }
+            .toList()
 
-        return codeGroup.map { SimpleCodeGroupResponseDto(it) }
+        return PageImpl(codeGroup,pageable,codeGroup.size.toLong())
     }
 
 }
