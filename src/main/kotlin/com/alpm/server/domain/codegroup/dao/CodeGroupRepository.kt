@@ -20,4 +20,8 @@ interface CodeGroupRepository: JpaRepository<CodeGroup, Long> {
 
     fun findByOwner(owner: User, pageable: Pageable): Page<CodeGroup>
 
+    @Query("SELECT cg FROM CodeGroup cg JOIN UserCodeGroup ucg ON ucg.codeGroup = cg WHERE ucg.user = :targetUser AND (cg.visible = true  OR  cg.owner = :targetUser)")
+    fun findCodeGroupsByUserId(targetUser: User, pageable: Pageable) : Page<CodeGroup>
+
+
 }

@@ -86,24 +86,10 @@ class CodeGroupService(
     }
 
     fun readCodeGroupsByUserId(id : Long, pageable: Pageable): Page<SimpleCodeGroupResponseDto> {
-        // todo: Pageable 수정
-        val currentUser = SecurityContextHolder.getContext().authentication.principal as User
         val targetUser = userRepository.findByIdOrNull(id) ?: throw CustomException(ErrorCode.USER_NOT_FOUND)
-        val codeGroup = targetUser.codeGroupList
-            .map {
-                it.codeGroup
-            }
-            .filter {
-                it.visible || it.owner.id!! == currentUser.id!!
-            }
-            .map {
-                SimpleCodeGroupResponseDto(it)
-            }
+        val codeGroupsPage = codeGroupRepository.findCodeGroupsByUserId(targetUser, pageable)
 
-        val start = pageable.offset.toInt()
-        val end = (start + pageable.pageSize).coerceAtMost(codeGroup.size)
-        val subCodeGroup = codeGroup.subList(start, end)
-        return PageImpl(subCodeGroup,pageable,codeGroup.size.toLong())
+        return codeGroupsPage.map { SimpleCodeGroupResponseDto(it) }
     }
 
     fun readCodeGroupByGroupId(id: Long): CodeGroupDetailResponseDto {
