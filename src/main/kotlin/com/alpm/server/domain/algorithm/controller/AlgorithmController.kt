@@ -79,4 +79,12 @@ class AlgorithmController(
         return ResponseEntity.ok().body(algorithmService.searchAllAlgorithms(request,pageable))
     }
 
+    @Operation(summary = "코드그룹 내 알고리즘 조회")
+    @GetMapping("/search/codegroup/{id}")
+    fun searchAlgorithmByGroupId(
+        @PathVariable("id") id: Long,
+        @PageableDefault(page = 0, size = 10, sort = ["createdAt"], direction = Sort.Direction.ASC) pageable: Pageable
+    ): ResponseEntity<Page<SimpleAlgorithmResponseDto>> {
+        return ResponseEntity.ok().body(algorithmService.readAlgorithmsByGroupId(id,pageable))
+    }
 }

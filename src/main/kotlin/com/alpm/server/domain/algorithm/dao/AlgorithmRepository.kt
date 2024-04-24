@@ -1,6 +1,7 @@
 package com.alpm.server.domain.algorithm.dao
 
 import com.alpm.server.domain.algorithm.entity.Algorithm
+import com.alpm.server.domain.codegroup.entity.CodeGroup
 import com.alpm.server.domain.user.entity.User
 import com.alpm.server.global.common.model.Language
 import org.springframework.data.domain.Page
@@ -19,5 +20,9 @@ interface AlgorithmRepository: JpaRepository<Algorithm, Long> {
     fun findAlgorithmsByLanguageAndVerifiedAndKeyword(language: Language?, verified: Boolean?, keyword: String?,pageable: Pageable): Page<Algorithm>
 
     fun findAlgorithmByOwner(owner: User, pageable: Pageable): Page<Algorithm>
+
+    @Query("SELECT DISTINCT a FROM Algorithm a JOIN CodeGroupAlgorithm cga ON cga.algorithm = a WHERE cga.codeGroup = :codeGroup")
+    fun findAlgorithmByGroupId(codeGroup: CodeGroup, pageable: Pageable): Page<Algorithm>
+
 
 }

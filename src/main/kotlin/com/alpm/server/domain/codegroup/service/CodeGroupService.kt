@@ -92,10 +92,9 @@ class CodeGroupService(
         return codeGroupsPage.map { SimpleCodeGroupResponseDto(it) }
     }
 
-    fun readCodeGroupByGroupId(id: Long): CodeGroupDetailResponseDto {
-        // todo: CodeGroup 내 Algorithm List -> Page
+    fun readCodeGroupByGroupId(id: Long): SimpleCodeGroupResponseDto {
         val codeGroup = codeGroupRepository.findByIdOrNull(id) ?: throw CustomException(ErrorCode.CODE_GROUP_NOT_FOUND)
-        return CodeGroupDetailResponseDto(codeGroup)
+        return SimpleCodeGroupResponseDto(codeGroup)
     }
 
     fun readAllOwnedCodeGroupByUserId(id: Long, pageable: Pageable): Page<SimpleCodeGroupResponseDto> {

@@ -6,6 +6,7 @@ import com.alpm.server.domain.algorithm.dto.request.AlgorithmSearchRequestDto
 import com.alpm.server.domain.algorithm.dto.response.AlgorithmDetailResponseDto
 import com.alpm.server.domain.algorithm.dto.response.SimpleAlgorithmResponseDto
 import com.alpm.server.domain.algorithm.entity.Algorithm
+import com.alpm.server.domain.codegroup.dao.CodeGroupRepository
 import com.alpm.server.domain.user.dao.UserRepository
 import com.alpm.server.domain.user.entity.User
 import com.alpm.server.global.common.model.Language
@@ -24,7 +25,9 @@ class AlgorithmService(
 
     private val algorithmRepository: AlgorithmRepository,
 
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
+
+    private val codeGroupRepository: CodeGroupRepository
 
 ){
 
@@ -101,6 +104,13 @@ class AlgorithmService(
         val verified = request.verified
         val keyword = request.keyword
         val algorithmList = algorithmRepository.findAlgorithmsByLanguageAndVerifiedAndKeyword(language, verified, keyword, pageable)
+
+        return algorithmList.map { SimpleAlgorithmResponseDto(it) }
+    }
+
+    fun readAlgorithmsByGroupId(id: Long, pageable: Pageable): Page<SimpleAlgorithmResponseDto>? {
+        val codeGroup = codeGroupRepository.findByIdOrNull(id) ?: throw CustomException(ErrorCode.CODE_GROUP_NOT_FOUND)
+        val algorithmList = algorithmRepository.findAlgorithmByGroupId(codeGroup,pageable)
 
         return algorithmList.map { SimpleAlgorithmResponseDto(it) }
     }
