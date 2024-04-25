@@ -136,16 +136,9 @@ fun searchAllCodeGroups(request: CodeGroupSearchRequestDto, pageable: Pageable):
         }
         val verified = request.verified
         val keyword = request.keyword
-        val codeGroup = codeGroupRepository.findCodeGroupsByLanguageAndVerifiedAndKeyword(language, verified, keyword, pageable)
-            .filter {
-                it.visible || it.owner.id!! == user.id!!
-            }
-            .map {
-                SimpleCodeGroupResponseDto(it)
-            }
-            .toList()
+        val codeGroup = codeGroupRepository.findCodeGroupsByLanguageAndVerifiedAndKeyword(language, verified, keyword, user, pageable)
 
-        return PageImpl(codeGroup,pageable,codeGroup.size.toLong())
+        return codeGroup.map { SimpleCodeGroupResponseDto(it) }
     }
 
 }
