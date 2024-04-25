@@ -18,7 +18,6 @@ import com.alpm.server.global.common.relation.entity.CodeGroupAlgorithm
 import com.alpm.server.global.exception.CustomException
 import com.alpm.server.global.exception.ErrorCode
 import org.springframework.data.domain.Page
-import org.springframework.data.domain.PageImpl
 import org.springframework.data.domain.Pageable
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.security.core.context.SecurityContextHolder
@@ -72,17 +71,9 @@ class CodeGroupService(
 
     fun readAllCodeGroups(pageable: Pageable): Page<SimpleCodeGroupResponseDto> {
         val user = SecurityContextHolder.getContext().authentication.principal as User
+        val codeGroup = codeGroupRepository.findAllWithUserId(user,pageable)
 
-        val codeGroup = codeGroupRepository.findAll(pageable)
-            .filter {
-                it.visible || it.owner.id == user.id
-            }
-            .map {
-                SimpleCodeGroupResponseDto(it)
-            }
-            .toList()
-
-        return PageImpl(codeGroup, pageable, codeGroup.size.toLong())
+        return codeGroup.map { SimpleCodeGroupResponseDto(it) }
     }
 
     fun readCodeGroupsByUserId(id : Long, pageable: Pageable): Page<SimpleCodeGroupResponseDto> {
