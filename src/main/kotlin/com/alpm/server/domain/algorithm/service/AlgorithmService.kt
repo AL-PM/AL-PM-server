@@ -64,22 +64,11 @@ class AlgorithmService(
         return algorithmRepository.findAll(pageable).map { SimpleAlgorithmResponseDto(it) }
     }
 
-    fun readAllAlgorithmsByUserId(id: Long): List<SimpleAlgorithmResponseDto> {
+    fun readAllAlgorithmsByUserId(id: Long, pageable: Pageable): Page<SimpleAlgorithmResponseDto> {
         val user = userRepository.findByIdOrNull(id) ?: throw CustomException(ErrorCode.USER_NOT_FOUND)
-        val codeGroupList = user.codeGroupList
-            .map {
-                it.codeGroup
-            }
-            .filter {
-                it.visible || it.owner.id!! == user.id!!
-            }
+        val algorithmList = algorithmRepository.findAlgorithmsByUser(user, pageable)
 
-        val algorithmSet = HashSet<Algorithm>()
-        for (codeGroup in codeGroupList) {
-            algorithmSet.addAll(codeGroup.algorithmList.map { it.algorithm })
-        }
-
-        return algorithmSet.toList().map { SimpleAlgorithmResponseDto(it) }
+        return algorithmList.map { SimpleAlgorithmResponseDto(it) }
     }
 
     fun readAllOwnedAlgorithmsByUserId(id:Long, pageable: Pageable): Page<SimpleAlgorithmResponseDto> {
