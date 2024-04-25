@@ -24,5 +24,12 @@ interface AlgorithmRepository: JpaRepository<Algorithm, Long> {
     @Query("SELECT DISTINCT a FROM Algorithm a JOIN CodeGroupAlgorithm cga ON cga.algorithm = a WHERE cga.codeGroup = :codeGroup")
     fun findAlgorithmByGroupId(codeGroup: CodeGroup, pageable: Pageable): Page<Algorithm>
 
+    @Query("SELECT DISTINCT a " +
+            "FROM Algorithm a " +
+            "JOIN CodeGroupAlgorithm cga ON cga.algorithm = a " +
+            "JOIN cga.codeGroup cg " +
+            "JOIN UserCodeGroup ucg ON ucg.codeGroup = cg " +
+            "WHERE ucg.user = :user AND (cg.visible = true OR cg.owner = :user)")
+    fun findAlgorithmsByUser(user: User, pageable: Pageable): Page<Algorithm>
 
 }
