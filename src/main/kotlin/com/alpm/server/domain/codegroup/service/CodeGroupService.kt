@@ -17,6 +17,8 @@ import com.alpm.server.global.common.relation.dao.UserCodeGroupRepository
 import com.alpm.server.global.common.relation.entity.CodeGroupAlgorithm
 import com.alpm.server.global.exception.CustomException
 import com.alpm.server.global.exception.ErrorCode
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.security.core.context.SecurityContextHolder
 
@@ -67,42 +69,30 @@ class CodeGroupService(
         )
     }
 
-    fun readAllCodeGroups(): List<SimpleCodeGroupResponseDto> {
+    fun readAllCodeGroups(pageable: Pageable): Page<SimpleCodeGroupResponseDto> {
         val user = SecurityContextHolder.getContext().authentication.principal as User
+        val codeGroup = codeGroupRepository.findAllWithUserId(user,pageable)
 
-        return codeGroupRepository.findAll()
-            .filter {
-                it.visible || it.owner.id == user.id
-            }
-            .map {
-                SimpleCodeGroupResponseDto(it)
-            }
+        return codeGroup.map { SimpleCodeGroupResponseDto(it) }
     }
 
-    fun readCodeGroupsByUserId(id : Long): List<SimpleCodeGroupResponseDto> {
-        val currentUser = SecurityContextHolder.getContext().authentication.principal as User
+    fun readCodeGroupsByUserId(id : Long, pageable: Pageable): Page<SimpleCodeGroupResponseDto> {
         val targetUser = userRepository.findByIdOrNull(id) ?: throw CustomException(ErrorCode.USER_NOT_FOUND)
+        val codeGroupsPage = codeGroupRepository.findCodeGroupsByUserId(targetUser, pageable)
 
-        return targetUser.codeGroupList
-            .map {
-                it.codeGroup
-            }
-            .filter {
-                it.visible || it.owner.id!! == currentUser.id!!
-            }
-            .map {
-                SimpleCodeGroupResponseDto(it)
-            }
+        return codeGroupsPage.map { SimpleCodeGroupResponseDto(it) }
     }
 
-    fun readAllCodeGroupByGroupId(id: Long): CodeGroupDetailResponseDto {
+    fun readCodeGroupByGroupId(id: Long): SimpleCodeGroupResponseDto {
         val codeGroup = codeGroupRepository.findByIdOrNull(id) ?: throw CustomException(ErrorCode.CODE_GROUP_NOT_FOUND)
-        return CodeGroupDetailResponseDto(codeGroup)
+        return SimpleCodeGroupResponseDto(codeGroup)
     }
 
-    fun readAllOwnedCodeGroupByUserId(id: Long): List<SimpleCodeGroupResponseDto> {
+    fun readAllOwnedCodeGroupByUserId(id: Long, pageable: Pageable): Page<SimpleCodeGroupResponseDto> {
         val user = userRepository.findByIdOrNull(id) ?: throw CustomException(ErrorCode.USER_NOT_FOUND)
-        return user.ownedCodeGroupList.map { SimpleCodeGroupResponseDto(it) }
+        val codeGroup = codeGroupRepository.findByOwner(user, pageable)
+
+        return codeGroup.map { SimpleCodeGroupResponseDto(it) }
     }
 
     fun importAlgorithmToCodeGroup(codeGroupId: Long, algorithmId: Long) {
@@ -128,9 +118,8 @@ class CodeGroupService(
         ))
     }
 
-    fun searchAllCodeGroups(request: CodeGroupSearchRequestDto): List<SimpleCodeGroupResponseDto> {
+fun searchAllCodeGroups(request: CodeGroupSearchRequestDto, pageable: Pageable): Page<SimpleCodeGroupResponseDto> {
         val user = SecurityContextHolder.getContext().authentication.principal as User
-
         val language = if (request.language == null) {
             null
         } else {
@@ -138,14 +127,9 @@ class CodeGroupService(
         }
         val verified = request.verified
         val keyword = request.keyword
+        val codeGroup = codeGroupRepository.findCodeGroupsByLanguageAndVerifiedAndKeyword(language, verified, keyword, user, pageable)
 
-        return codeGroupRepository.findCodeGroupsByLanguageAndVerifiedAndKeyword(language, verified, keyword)
-            .filter {
-                it.visible || it.owner.id!! == user.id!!
-            }
-            .map {
-                SimpleCodeGroupResponseDto(it)
-            }
+        return codeGroup.map { SimpleCodeGroupResponseDto(it) }
     }
 
 }

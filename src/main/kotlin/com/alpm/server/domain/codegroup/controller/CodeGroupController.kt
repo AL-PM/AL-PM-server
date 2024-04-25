@@ -1,8 +1,6 @@
 package com.alpm.server.domain.codegroup.controller
 
 
-import com.alpm.server.domain.algorithm.dto.request.AlgorithmSearchRequestDto
-import com.alpm.server.domain.algorithm.dto.response.SimpleAlgorithmResponseDto
 import com.alpm.server.domain.codegroup.dto.request.CodeGroupCreateRequestDto
 import com.alpm.server.domain.codegroup.dto.request.CodeGroupSearchRequestDto
 import com.alpm.server.domain.codegroup.dto.response.CodeGroupDetailResponseDto
@@ -10,6 +8,10 @@ import com.alpm.server.domain.codegroup.dto.response.SimpleCodeGroupResponseDto
 import com.alpm.server.domain.codegroup.service.CodeGroupService
 import com.alpm.server.global.validation.ValidationSequence
 import io.swagger.v3.oas.annotations.Operation
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
+import org.springframework.data.domain.Sort
+import org.springframework.data.web.PageableDefault
 import org.springframework.http.ResponseEntity
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
@@ -37,26 +39,34 @@ class CodeGroupController(
 
     @Operation(summary = "CodeGroup 전체 조회")
     @GetMapping("")
-    fun readAllCodeGroups(): ResponseEntity<List<SimpleCodeGroupResponseDto>> {
-        return ResponseEntity.ok().body(codeGroupService.readAllCodeGroups())
+    fun readAllCodeGroups(
+        @PageableDefault(page = 0, size = 10, sort = ["createdAt"], direction = Sort.Direction.ASC) pageable: Pageable
+    ): ResponseEntity<Page<SimpleCodeGroupResponseDto>> {
+        return ResponseEntity.ok().body(codeGroupService.readAllCodeGroups(pageable))
     }
 
     @Operation(summary = "특정 User의 CodeGroup 전체 조회")
     @GetMapping("/user/{id}")
-    fun readCodeGroupsByUserId(@PathVariable("id") id: Long): ResponseEntity<List<SimpleCodeGroupResponseDto>> {
-        return ResponseEntity.ok().body(codeGroupService.readCodeGroupsByUserId(id))
+    fun readCodeGroupsByUserId(
+        @PathVariable("id") id: Long,
+        @PageableDefault(page = 0, size = 10, sort = ["createdAt"], direction = Sort.Direction.ASC) pageable: Pageable
+    ): ResponseEntity<Page<SimpleCodeGroupResponseDto>> {
+        return ResponseEntity.ok().body(codeGroupService.readCodeGroupsByUserId(id,pageable))
     }
 
     @Operation(summary = "CodeGroup 단일 조회")
     @GetMapping("/{id}")
     fun readCodeGroupById(@PathVariable("id") id: Long): ResponseEntity<Any> {
-        return ResponseEntity.ok().body(codeGroupService.readAllCodeGroupByGroupId(id))
+        return ResponseEntity.ok().body(codeGroupService.readCodeGroupByGroupId(id))
     }
 
     @Operation(summary = "특정 User(Owner)가 작성한 CodeGroup 전체 조회")
     @GetMapping("/owner/{id}")
-    fun readAllOwnedCodeGroupByUserId(@PathVariable("id") id: Long): ResponseEntity<List<SimpleCodeGroupResponseDto>> {
-        return ResponseEntity.ok().body(codeGroupService.readAllOwnedCodeGroupByUserId(id))
+    fun readAllOwnedCodeGroupByUserId(
+        @PathVariable("id") id: Long,
+        @PageableDefault(page = 0, size = 10, sort = ["createdAt"], direction = Sort.Direction.ASC) pageable: Pageable
+    ): ResponseEntity<Page<SimpleCodeGroupResponseDto>> {
+        return ResponseEntity.ok().body(codeGroupService.readAllOwnedCodeGroupByUserId(id,pageable))
     }
 
     @Operation(summary = "CodeGroup에 Algorithm 추가")
@@ -71,9 +81,10 @@ class CodeGroupController(
     @Operation(summary = "CodeGroup 검색")
     @GetMapping("/search")
     fun searchAllAlgorithm(
-        @ModelAttribute @Validated(value = [ValidationSequence::class]) request: CodeGroupSearchRequestDto
-    ): ResponseEntity<List<SimpleCodeGroupResponseDto>> {
-        return ResponseEntity.ok().body(codeGroupService.searchAllCodeGroups(request))
+        @ModelAttribute @Validated(value = [ValidationSequence::class]) request: CodeGroupSearchRequestDto,
+        @PageableDefault(page = 0, size = 10, sort = ["createdAt"], direction = Sort.Direction.ASC) pageable: Pageable
+    ): ResponseEntity<Page<SimpleCodeGroupResponseDto>> {
+        return ResponseEntity.ok().body(codeGroupService.searchAllCodeGroups(request,pageable))
     }
 
 }
