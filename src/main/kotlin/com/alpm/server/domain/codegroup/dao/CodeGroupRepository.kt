@@ -12,22 +12,30 @@ import org.springframework.stereotype.Repository
 @Repository
 interface CodeGroupRepository: JpaRepository<CodeGroup, Long> {
 
-    @Query("SELECT cg FROM CodeGroup cg " +
-            "JOIN UserCodeGroup ucg ON ucg.codeGroup = cg " +
-            "WHERE ucg.user = :user " +
-            "AND (cg.visible = true OR cg.owner = :user) " +
-            "AND (:language is null OR cg.language = :language) " +
-            "AND (:verified is null OR cg.verified = :verified) " +
-            "AND (:keyword is null OR cg.owner.name LIKE CONCAT('%', :keyword, '%') OR cg.name LIKE CONCAT('%', :keyword, '%'))")
-    fun findCodeGroupsByLanguageAndVerifiedAndKeyword(language: Language?, verified: Boolean?, keyword: String?,user: User,pageable: Pageable): Page<CodeGroup>
+    @Query("select cg " +
+            "from CodeGroup cg join UserCodeGroup ucg on ucg.codeGroup = cg " +
+            "where (cg.visible = true or cg.owner = :user)")
+    fun findCodeGroups(user: User, pageable: Pageable): Page<CodeGroup>
 
-    fun findByOwner(owner: User, pageable: Pageable): Page<CodeGroup>
+    @Query("select cg " +
+            "from CodeGroup cg join UserCodeGroup ucg on ucg.codeGroup = cg " +
+            "where ucg.user = :user and (cg.visible = true or cg.owner = :user)")
+    fun findCodeGroupsByUser(user: User, pageable: Pageable) : Page<CodeGroup>
 
-    @Query("SELECT c FROM CodeGroup c JOIN UserCodeGroup ucg ON ucg.codeGroup = c WHERE (c.visible = true  OR  c.owner = :user)")
-    fun findAllWithUserId(user: User, pageable: Pageable): Page<CodeGroup>
+    fun findCodeGroupsByOwner(owner: User, pageable: Pageable): Page<CodeGroup>
 
-    @Query("SELECT cg FROM CodeGroup cg JOIN UserCodeGroup ucg ON ucg.codeGroup = cg WHERE ucg.user = :targetUser AND (cg.visible = true  OR  cg.owner = :targetUser)")
-    fun findCodeGroupsByUserId(targetUser: User, pageable: Pageable) : Page<CodeGroup>
+    @Query("select cg from CodeGroup cg " +
+            "join UserCodeGroup ucg on ucg.codeGroup = cg " +
+            "where ucg.user = :user " +
+            "and (cg.visible = true or cg.owner = :user) " +
+            "and (:language is null or cg.language = :language) " +
+            "and (:verified is null or cg.verified = :verified) " +
+            "and (:keyword is null " +
+            "or cg.owner.name like concat('%', :keyword, '%') " +
+            "or cg.name like concat('%', :keyword, '%'))")
+    fun findCodeGroupsByLanguageAndVerifiedAndKeyword(
+        language: Language?, verified: Boolean?, keyword: String?, user: User, pageable: Pageable
+    ): Page<CodeGroup>
 
 
 }

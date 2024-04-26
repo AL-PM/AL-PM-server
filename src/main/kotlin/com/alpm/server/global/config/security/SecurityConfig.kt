@@ -33,7 +33,10 @@ class SecurityConfig (
                 .permitAll()
                 .anyRequest().authenticated()
         }
-        .addFilterBefore(JwtAuthenticationFilter(jwtAuthenticationService), UsernamePasswordAuthenticationFilter::class.java)
+        .addFilterBefore(
+            JwtAuthenticationFilter(jwtAuthenticationService),
+            UsernamePasswordAuthenticationFilter::class.java
+        )
         .exceptionHandling {
             it.authenticationEntryPoint(JwtAuthenticationEntryPoint(objectMapper))
         }
