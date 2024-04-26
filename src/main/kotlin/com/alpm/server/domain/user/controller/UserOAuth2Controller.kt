@@ -3,6 +3,7 @@ package com.alpm.server.domain.user.controller
 import com.alpm.server.domain.user.dto.response.UserLoginResponseDto
 import com.alpm.server.global.auth.oauth2.OAuth2Service
 import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
+@Tag(name = "User OAuth2", description = "User OAuth2 API")
 @RestController
 @RequestMapping("/oauth2")
 class UserOAuth2Controller (

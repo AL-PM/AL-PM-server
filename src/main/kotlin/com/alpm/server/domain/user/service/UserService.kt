@@ -39,12 +39,18 @@ class UserService (
             newYear = newYear.plusDays(1)
         }
 
-        val startDateTime = LocalDateTime.of(LocalDate.of(LocalDate.now().year, 1, 1), LocalTime.of(0, 0, 0))
+        val startDateTime = LocalDateTime.of(
+            LocalDate.of(LocalDate.now().year, 1, 1),
+            LocalTime.of(0, 0, 0)
+        )
         val endDateTime = LocalDateTime.now()
         historyRepository.findAllByUserAndCreatedAtBetween(user, startDateTime, endDateTime)
             .fold(historySizeList) { list, history ->
                 list.apply {
-                    val days = LocalDate.of(thisYear, 1, 1).until(history.createdAt.toLocalDate(), ChronoUnit.DAYS)
+                    val days = LocalDate.of(thisYear, 1, 1).until(
+                        history.createdAt.toLocalDate(),
+                        ChronoUnit.DAYS
+                    )
                     list[days.toInt()].size++
                 }
             }

@@ -13,23 +13,28 @@ import org.springframework.stereotype.Repository
 @Repository
 interface AlgorithmRepository: JpaRepository<Algorithm, Long> {
 
-    @Query("SELECT a FROM Algorithm a " +
-            "WHERE (:language is null or a.language = :language) " +
-            "and (:verified is null or a.verified = :verified) " +
-            "and (:keyword is null or a.owner.name LIKE CONCAT('%', :keyword, '%') or a.name LIKE CONCAT('%', :keyword, '%'))")
-    fun findAlgorithmsByLanguageAndVerifiedAndKeyword(language: Language?, verified: Boolean?, keyword: String?,pageable: Pageable): Page<Algorithm>
-
-    fun findAlgorithmByOwner(owner: User, pageable: Pageable): Page<Algorithm>
-
-    @Query("SELECT DISTINCT a FROM Algorithm a JOIN CodeGroupAlgorithm cga ON cga.algorithm = a WHERE cga.codeGroup = :codeGroup")
-    fun findAlgorithmByGroupId(codeGroup: CodeGroup, pageable: Pageable): Page<Algorithm>
-
-    @Query("SELECT DISTINCT a " +
-            "FROM Algorithm a " +
-            "JOIN CodeGroupAlgorithm cga ON cga.algorithm = a " +
-            "JOIN cga.codeGroup cg " +
-            "JOIN UserCodeGroup ucg ON ucg.codeGroup = cg " +
-            "WHERE ucg.user = :user AND (cg.visible = true OR cg.owner = :user)")
+    @Query("select distinct a " +
+            "from Algorithm a " +
+            "join CodeGroupAlgorithm cga on cga.algorithm = a " +
+            "join cga.codeGroup cg " +
+            "join UserCodeGroup ucg on ucg.codeGroup = cg " +
+            "where ucg.user = :user and (cg.visible = true or cg.owner = :user)")
     fun findAlgorithmsByUser(user: User, pageable: Pageable): Page<Algorithm>
+
+    fun findAlgorithmsByOwner(owner: User, pageable: Pageable): Page<Algorithm>
+
+    @Query("select a " +
+            "from Algorithm a join CodeGroupAlgorithm cga on cga.algorithm = a " +
+            "where cga.codeGroup = :codeGroup")
+    fun findAlgorithmsByCodeGroup(codeGroup: CodeGroup, pageable: Pageable): Page<Algorithm>
+
+    @Query("select a from Algorithm a " +
+            "where (:language is null or a.language = :language) " +
+            "and (:verified is null or a.verified = :verified) " +
+            "and (:keyword is null or a.owner.name like concat('%', :keyword, '%') " +
+            "or a.name like concat('%', :keyword, '%'))")
+    fun findAlgorithmsByLanguageAndVerifiedAndKeyword(
+        language: Language?, verified: Boolean?, keyword: String?, pageable: Pageable
+    ): Page<Algorithm>
 
 }
