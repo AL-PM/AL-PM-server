@@ -1,6 +1,7 @@
 package com.alpm.server.domain.codegroup.dto.response
 
 import com.alpm.server.domain.codegroup.entity.CodeGroup
+import com.alpm.server.domain.user.dto.response.OwnerResponseDto
 import com.alpm.server.global.common.model.Language
 import java.time.LocalDateTime
 
@@ -17,6 +18,8 @@ data class SimpleCodeGroupResponseDto (
 
     val language: Language, //(enum - C/C++, JAVA, Python),
 
+    val owner: OwnerResponseDto,
+
     val createdAt: LocalDateTime,
 
     val updatedAt: LocalDateTime
@@ -28,6 +31,7 @@ data class SimpleCodeGroupResponseDto (
         verified = codeGroup.verified,
         visible = codeGroup.visible,
         language = codeGroup.language,
+        owner = OwnerResponseDto(codeGroup.owner),
         createdAt = codeGroup.createdAt,
         updatedAt = codeGroup.updatedAt
     )
