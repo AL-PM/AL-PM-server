@@ -19,11 +19,15 @@ class AlgorithmCreateService (
     fun saveAlgorithm(request: AlgorithmCreateRequestDto): AlgorithmDetailResponseDto {
         val user = SecurityContextHolder.getContext().authentication.principal as User
 
+        // todo: original에 request.content를 chatGPT를 통해 코드 형식을 통일하여 넣어야 함
+        // todo: content에 original을 chatGPT를 통해 가공하여 넣어야 함
+
         val algorithm = algorithmRepository.save(
             Algorithm(
                 name = request.name!!,
                 language = Language.valueOf(request.language!!),
-                content = request.content!!,
+                original = request.content!!,
+                content = request.content,
                 description = request.description!!,
                 owner = user
             )
