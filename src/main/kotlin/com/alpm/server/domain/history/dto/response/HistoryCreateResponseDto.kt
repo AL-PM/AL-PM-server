@@ -14,9 +14,9 @@ data class HistoryCreateResponseDto (
 
     val point: Int,
 
-    val user: User,
+    val userId: Long,
 
-    val algorithm: Algorithm,
+    val algorithmId: Long,
 
     val createdAt: LocalDateTime,
 
@@ -27,8 +27,8 @@ data class HistoryCreateResponseDto (
         id = history.id!!,
         problemType = history.problemType,
         point = history.point,
-        user = history.user,
-        algorithm = history.algorithm,
+        userId = history.user.id!!,
+        algorithmId = history.algorithm.id!!,
         createdAt = history.createdAt,
         updatedAt = history.updatedAt
     )

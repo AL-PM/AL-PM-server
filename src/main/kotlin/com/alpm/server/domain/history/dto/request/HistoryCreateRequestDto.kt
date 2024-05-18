@@ -10,9 +10,7 @@ data class HistoryCreateRequestDto (
 
     val point: Int,
 
-    val user: User,
-
-    val algorithm:Algorithm
+    val algorithmId:Long
 
 ){
 }
