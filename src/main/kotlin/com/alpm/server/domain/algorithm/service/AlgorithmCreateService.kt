@@ -6,15 +6,26 @@ import com.alpm.server.domain.algorithm.dto.response.AlgorithmDetailResponseDto
 import com.alpm.server.domain.algorithm.entity.Algorithm
 import com.alpm.server.domain.user.entity.User
 import com.alpm.server.global.common.model.Language
+import com.alpm.server.infra.openai.OpenAiService
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Service
 
 @Service
 class AlgorithmCreateService (
 
-    private val algorithmRepository: AlgorithmRepository
+    private val algorithmRepository: AlgorithmRepository,
+
+    private val openAiService: OpenAiService
 
 ) {
+
+    fun test(code: String): String? {
+        val content = openAiService.organizeAndAnnotate(code)
+        return openAiService.generateBlanks(content)
+    }
 
     fun saveAlgorithm(request: AlgorithmCreateRequestDto): AlgorithmDetailResponseDto {
         val user = SecurityContextHolder.getContext().authentication.principal as User

@@ -27,4 +27,10 @@ class AlgorithmCreateController(
         return ResponseEntity.ok().body(algorithmCreateService.saveAlgorithm(request))
     }
 
+    @Operation(summary = "test")
+    @PostMapping("/test")
+    fun test(@RequestBody code: String): ResponseEntity<String> {
+        return ResponseEntity.ok().body(algorithmCreateService.test(code))
+    }
+
 }
