@@ -19,11 +19,6 @@ class AlgorithmCreateService (
 
 ) {
 
-    fun test(code: String): String? {
-        val content = openAiService.organizeAndAnnotate(code)
-        return openAiService.generateBlanks(content)
-    }
-
     fun saveAlgorithm(request: AlgorithmCreateRequestDto): AlgorithmDetailResponseDto {
         val user = SecurityContextHolder.getContext().authentication.principal as User
 
