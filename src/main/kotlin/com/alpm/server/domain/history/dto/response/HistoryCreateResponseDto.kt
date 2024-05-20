@@ -1,9 +1,7 @@
 package com.alpm.server.domain.history.dto.response
 
-import com.alpm.server.domain.algorithm.entity.Algorithm
 import com.alpm.server.domain.history.entity.History
-import com.alpm.server.domain.history.entity.ProblemType
-import com.alpm.server.domain.user.entity.User
+import com.alpm.server.global.common.model.ProblemType
 import java.time.LocalDateTime
 
 data class HistoryCreateResponseDto (
