@@ -6,6 +6,7 @@ import com.alpm.server.domain.history.dto.request.HistoryCreateRequestDto
 import com.alpm.server.domain.history.dto.response.HistoryCreateResponseDto
 import com.alpm.server.domain.history.entity.History
 import com.alpm.server.domain.user.entity.User
+import com.alpm.server.global.common.model.ProblemType
 import com.alpm.server.global.exception.CustomException
 import com.alpm.server.global.exception.ErrorCode
 import org.springframework.data.repository.findByIdOrNull
@@ -26,8 +27,8 @@ class HistoryCreateService (
 
         val history = historyRepository.save(
             History(
-                problemType = request.problemType,
-                point = request.point,
+                problemType = ProblemType.valueOf(request.problemType!!),
+                point = request.point!!,
                 user = user,
                 algorithm = algorithmRepository.findByIdOrNull(request.algorithmId)
                     ?:throw CustomException(ErrorCode.ALGORITHM_NOT_FOUND)

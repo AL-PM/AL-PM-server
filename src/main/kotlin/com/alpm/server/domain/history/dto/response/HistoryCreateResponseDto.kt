@@ -4,7 +4,7 @@ import com.alpm.server.domain.history.entity.History
 import com.alpm.server.global.common.model.ProblemType
 import java.time.LocalDateTime
 
-data class HistoryCreateResponseDto (
+data class HistoryCreateResponseDto(
 
     val id:Long,
 

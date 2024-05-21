@@ -3,8 +3,8 @@ package com.alpm.server.domain.history.dto.request
 import com.alpm.server.global.common.model.ProblemType
 import com.alpm.server.global.validation.Enum
 import com.alpm.server.global.validation.ValidationGroup.*
-import jakarta.validation.constraints.Min
-import jakarta.validation.constraints.NotBlank
+import jakarta.validation.constraints.NotNull
+import org.hibernate.validator.constraints.Range
 
 data class HistoryCreateRequestDto (
 
@@ -13,24 +13,25 @@ data class HistoryCreateRequestDto (
         enumClass = ProblemType::class,
         groups = [EnumGroup::class]
     )
-    val problemType: ProblemType,
+    val problemType: String?,
 
-    @field:NotBlank(
-        message = "학습 점수는 필수값 입니다.",
+    @field:NotNull(
+        message = "획득 점수는 필수 값 입니다.",
         groups = [NotNullGroup::class]
     )
-    @field:Min(
-        message = "학습 점수는 자연수만 입력 가능합니다",
-        value = 1,
-        groups = [MinMaxGroup::class]
+    @field: Range(
+        message = "획득 점수는 1에서 10000 사이의 자연수여야 합니다.",
+        min = 1,
+        max =  10000,
+        groups = [NotNullGroup::class]
     )
-    val point: Int,
+    val point: Int?,
 
-    @field:NotBlank(
+    @field:NotNull(
         message = "알고리즘 ID는 필수값 입니다.",
         groups = [NotNullGroup::class]
     )
-    val algorithmId:Long
+    val algorithmId:Long?
 
 ){
 }
