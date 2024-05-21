@@ -3,6 +3,7 @@ package com.alpm.server.domain.history.entity
 import com.alpm.server.domain.algorithm.entity.Algorithm
 import com.alpm.server.domain.user.entity.User
 import com.alpm.server.global.common.model.BaseTimeEntity
+import com.alpm.server.global.common.model.ProblemType
 import jakarta.persistence.*
 
 @Entity
@@ -10,7 +11,7 @@ class History (
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long,
+    val id: Long? = null,
 
     val problemType: ProblemType,
 

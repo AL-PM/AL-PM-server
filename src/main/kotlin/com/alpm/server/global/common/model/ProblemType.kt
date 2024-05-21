@@ -1,4 +1,4 @@
-package com.alpm.server.domain.history.entity
+package com.alpm.server.global.common.model
 
 enum class ProblemType (
 
