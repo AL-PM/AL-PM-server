@@ -17,6 +17,8 @@ data class AlgorithmDetailResponseDto (
 
     val language: Language, //(enum - C/C++, JAVA, Python),
 
+    val original: String,
+
     val content: String,
 
     val description: String,
@@ -35,6 +37,7 @@ data class AlgorithmDetailResponseDto (
         verified = algorithm.verified,
         language = algorithm.language,
         name = algorithm.name,
+        original = algorithm.original,
         content = algorithm.content,
         description = algorithm.description,
         owner = OwnerResponseDto(algorithm.owner),

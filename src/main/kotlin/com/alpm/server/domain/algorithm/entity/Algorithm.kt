@@ -21,6 +21,9 @@ class Algorithm(
     val language: Language,
 
     @Column(columnDefinition = "LONGTEXT")
+    val original: String,
+
+    @Column(columnDefinition = "LONGTEXT")
     val content: String,
 
     @Column(columnDefinition = "LONGTEXT")
