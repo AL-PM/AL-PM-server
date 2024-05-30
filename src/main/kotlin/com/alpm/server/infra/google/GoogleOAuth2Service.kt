@@ -70,7 +70,7 @@ class GoogleOAuth2Service(
         val entity = HttpEntity(params, headers)
 
         val restTemplate = RestTemplate()
-        restTemplate.errorHandler = oAuth2ErrorHandler
+        // restTemplate.errorHandler = oAuth2ErrorHandler
         val response = restTemplate.exchange(tokenUri, HttpMethod.POST, entity, JsonNode::class.java)
         val accessTokenBody = response.body
 
@@ -79,7 +79,7 @@ class GoogleOAuth2Service(
 
     fun getUserResource(accessToken: String, registrationId: String): JsonNode? {
         val restTemplate = RestTemplate()
-        restTemplate.errorHandler = oAuth2ErrorHandler
+        // restTemplate.errorHandler = oAuth2ErrorHandler
 
         val headers = HttpHeaders()
         headers.set("Authorization", "Bearer $accessToken")
