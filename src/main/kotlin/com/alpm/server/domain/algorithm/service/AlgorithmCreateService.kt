@@ -29,8 +29,8 @@ class AlgorithmCreateService (
             Algorithm(
                 name = request.name!!,
                 language = Language.valueOf(request.language!!),
-                original = original,
-                content = content,
+                original = original.replace("    ", "\t").replace("\r", ""),
+                content = content.replace("    ", "\t").replace("\r", ""),
                 description = request.description!!,
                 owner = user
             )
