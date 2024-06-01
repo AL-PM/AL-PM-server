@@ -1,5 +1,6 @@
 package com.alpm.server.domain.codegroup.controller
 
+import com.alpm.server.domain.algorithm.dto.response.AlgorithmDetailResponseDto
 import com.alpm.server.domain.codegroup.dto.request.CodeGroupSearchRequestDto
 import com.alpm.server.domain.codegroup.dto.response.SimpleCodeGroupResponseDto
 import com.alpm.server.domain.codegroup.service.CodeGroupReadService
@@ -62,6 +63,12 @@ class CodeGroupReadController(
         @PageableDefault(page = 0, size = 10, sort = ["createdAt"], direction = Sort.Direction.DESC) pageable: Pageable
     ): ResponseEntity<Page<SimpleCodeGroupResponseDto>> {
         return ResponseEntity.ok().body(codeGroupReadService.searchCodeGroups(request,pageable))
+    }
+
+    @Operation(summary = "CodeGroup 내의 Algorithm 중 랜덤으로 단일 조회")
+    @GetMapping("/{codeGroupId}/random")
+    fun readRandomAlgorithmByCodeGroupId(@PathVariable codeGroupId: Long): ResponseEntity<AlgorithmDetailResponseDto> {
+        return ResponseEntity.ok().body(codeGroupReadService.readRandomAlgorithmByCodeGroupId(codeGroupId))
     }
 
 }
