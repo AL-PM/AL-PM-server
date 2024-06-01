@@ -62,6 +62,12 @@ class CodeGroupUpdateService (
             throw CustomException(ErrorCode.LANGUAGE_MISMATCH)
         }
 
+        for (a in codeGroup.algorithmList.map { it.algorithm }) {
+            if (a.id == algorithmId) {
+                throw CustomException(ErrorCode.ALGORITHM_EXIST)
+            }
+        }
+
         algorithm.referencedCount++
         algorithm = algorithmRepository.save(algorithm)
 

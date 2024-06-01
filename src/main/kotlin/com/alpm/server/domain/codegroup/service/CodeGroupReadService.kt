@@ -1,5 +1,6 @@
 package com.alpm.server.domain.codegroup.service
 
+import com.alpm.server.domain.algorithm.dto.response.AlgorithmDetailResponseDto
 import org.springframework.stereotype.Service
 import com.alpm.server.domain.codegroup.dao.CodeGroupRepository
 import com.alpm.server.domain.codegroup.dto.request.CodeGroupSearchRequestDto
@@ -24,8 +25,14 @@ class CodeGroupReadService(
 ) {
 
     fun readCodeGroupById(codeGroupId: Long): SimpleCodeGroupResponseDto {
+        val user = SecurityContextHolder.getContext().authentication.principal as User
         val codeGroup = codeGroupRepository.findByIdOrNull(codeGroupId)
             ?: throw CustomException(ErrorCode.CODE_GROUP_NOT_FOUND)
+
+        if (!codeGroup.visible && codeGroup.owner.id != user.id) {
+            throw CustomException(ErrorCode.CODE_GROUP_NOT_FOUND)
+        }
+
         return SimpleCodeGroupResponseDto(codeGroup)
     }
 
@@ -66,6 +73,15 @@ class CodeGroupReadService(
         )
 
         return codeGroup.map { SimpleCodeGroupResponseDto(it) }
+    }
+
+    fun readRandomAlgorithmByCodeGroupId(codeGroupId: Long): AlgorithmDetailResponseDto {
+        val codeGroup = codeGroupRepository.findByIdOrNull(codeGroupId)
+            ?: throw CustomException(ErrorCode.CODE_GROUP_NOT_FOUND)
+
+        val pick = codeGroup.algorithmList.random()
+
+        return AlgorithmDetailResponseDto(pick.algorithm)
     }
 
 }
