@@ -4,7 +4,7 @@ import com.alpm.server.domain.algorithm.dto.response.AlgorithmDetailResponseDto
 import org.springframework.stereotype.Service
 import com.alpm.server.domain.codegroup.dao.CodeGroupRepository
 import com.alpm.server.domain.codegroup.dto.request.CodeGroupSearchRequestDto
-import com.alpm.server.domain.codegroup.dto.response.SimpleCodeGroupResponseDto
+import com.alpm.server.domain.codegroup.dto.response.CodeGroupResponseDto
 import com.alpm.server.domain.user.dao.UserRepository
 import com.alpm.server.domain.user.entity.User
 import com.alpm.server.global.common.model.Language
@@ -24,7 +24,7 @@ class CodeGroupReadService(
 
 ) {
 
-    fun readCodeGroupById(codeGroupId: Long): SimpleCodeGroupResponseDto {
+    fun readCodeGroupById(codeGroupId: Long): CodeGroupResponseDto {
         val user = SecurityContextHolder.getContext().authentication.principal as User
         val codeGroup = codeGroupRepository.findByIdOrNull(codeGroupId)
             ?: throw CustomException(ErrorCode.CODE_GROUP_NOT_FOUND)
@@ -33,31 +33,31 @@ class CodeGroupReadService(
             throw CustomException(ErrorCode.CODE_GROUP_NOT_FOUND)
         }
 
-        return SimpleCodeGroupResponseDto(codeGroup)
+        return CodeGroupResponseDto(codeGroup)
     }
 
-    fun readCodeGroups(pageable: Pageable): Page<SimpleCodeGroupResponseDto> {
+    fun readCodeGroups(pageable: Pageable): Page<CodeGroupResponseDto> {
         val user = SecurityContextHolder.getContext().authentication.principal as User
         val codeGroup = codeGroupRepository.findCodeGroups(user, pageable)
 
-        return codeGroup.map { SimpleCodeGroupResponseDto(it) }
+        return codeGroup.map { CodeGroupResponseDto(it) }
     }
 
-    fun readCodeGroupsByUser(userId : Long, pageable: Pageable): Page<SimpleCodeGroupResponseDto> {
+    fun readCodeGroupsByUser(userId : Long, pageable: Pageable): Page<CodeGroupResponseDto> {
         val targetUser = userRepository.findByIdOrNull(userId) ?: throw CustomException(ErrorCode.USER_NOT_FOUND)
         val codeGroupsPage = codeGroupRepository.findCodeGroupsByUser(targetUser, pageable)
 
-        return codeGroupsPage.map { SimpleCodeGroupResponseDto(it) }
+        return codeGroupsPage.map { CodeGroupResponseDto(it) }
     }
 
-    fun readCodeGroupsByOwner(ownerId: Long, pageable: Pageable): Page<SimpleCodeGroupResponseDto> {
+    fun readCodeGroupsByOwner(ownerId: Long, pageable: Pageable): Page<CodeGroupResponseDto> {
         val user = userRepository.findByIdOrNull(ownerId) ?: throw CustomException(ErrorCode.USER_NOT_FOUND)
         val codeGroup = codeGroupRepository.findCodeGroupsByOwner(user, pageable)
 
-        return codeGroup.map { SimpleCodeGroupResponseDto(it) }
+        return codeGroup.map { CodeGroupResponseDto(it) }
     }
 
-    fun searchCodeGroups(request: CodeGroupSearchRequestDto, pageable: Pageable): Page<SimpleCodeGroupResponseDto> {
+    fun searchCodeGroups(request: CodeGroupSearchRequestDto, pageable: Pageable): Page<CodeGroupResponseDto> {
         val user = SecurityContextHolder.getContext().authentication.principal as User
 
         val codeGroup = codeGroupRepository.findCodeGroupsByLanguageAndVerifiedAndKeyword(
@@ -72,7 +72,7 @@ class CodeGroupReadService(
             pageable = pageable
         )
 
-        return codeGroup.map { SimpleCodeGroupResponseDto(it) }
+        return codeGroup.map { CodeGroupResponseDto(it) }
     }
 
     fun readRandomAlgorithmByCodeGroupId(codeGroupId: Long): AlgorithmDetailResponseDto {
