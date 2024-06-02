@@ -1,7 +1,8 @@
 package com.alpm.server.domain.codegroup.controller
 
+import com.alpm.server.domain.algorithm.dto.response.AlgorithmDetailResponseDto
 import com.alpm.server.domain.codegroup.dto.request.CodeGroupSearchRequestDto
-import com.alpm.server.domain.codegroup.dto.response.SimpleCodeGroupResponseDto
+import com.alpm.server.domain.codegroup.dto.response.CodeGroupResponseDto
 import com.alpm.server.domain.codegroup.service.CodeGroupReadService
 import com.alpm.server.global.validation.ValidationSequence
 import io.swagger.v3.oas.annotations.Operation
@@ -25,7 +26,7 @@ class CodeGroupReadController(
 
     @Operation(summary = "CodeGroup 단일 조회")
     @GetMapping("/{codeGroupId}")
-    fun readCodeGroupsById(@PathVariable("codeGroupId") codeGroupId: Long): ResponseEntity<SimpleCodeGroupResponseDto> {
+    fun readCodeGroupsById(@PathVariable("codeGroupId") codeGroupId: Long): ResponseEntity<CodeGroupResponseDto> {
         return ResponseEntity.ok().body(codeGroupReadService.readCodeGroupById(codeGroupId))
     }
 
@@ -33,7 +34,7 @@ class CodeGroupReadController(
     @GetMapping("")
     fun readCodeGroups(
         @PageableDefault(page = 0, size = 10, sort = ["createdAt"], direction = Sort.Direction.DESC) pageable: Pageable
-    ): ResponseEntity<Page<SimpleCodeGroupResponseDto>> {
+    ): ResponseEntity<Page<CodeGroupResponseDto>> {
         return ResponseEntity.ok().body(codeGroupReadService.readCodeGroups(pageable))
     }
 
@@ -42,7 +43,7 @@ class CodeGroupReadController(
     fun readCodeGroupsByUser(
         @PathVariable("userId") userId: Long,
         @PageableDefault(page = 0, size = 10, sort = ["createdAt"], direction = Sort.Direction.DESC) pageable: Pageable
-    ): ResponseEntity<Page<SimpleCodeGroupResponseDto>> {
+    ): ResponseEntity<Page<CodeGroupResponseDto>> {
         return ResponseEntity.ok().body(codeGroupReadService.readCodeGroupsByUser(userId, pageable))
     }
 
@@ -51,7 +52,7 @@ class CodeGroupReadController(
     fun readCodeGroupsByOwner(
         @PathVariable("ownerId") ownerId: Long,
         @PageableDefault(page = 0, size = 10, sort = ["createdAt"], direction = Sort.Direction.DESC) pageable: Pageable
-    ): ResponseEntity<Page<SimpleCodeGroupResponseDto>> {
+    ): ResponseEntity<Page<CodeGroupResponseDto>> {
         return ResponseEntity.ok().body(codeGroupReadService.readCodeGroupsByOwner(ownerId, pageable))
     }
 
@@ -60,8 +61,14 @@ class CodeGroupReadController(
     fun searchCodeGroups(
         @ModelAttribute @Validated(value = [ValidationSequence::class]) request: CodeGroupSearchRequestDto,
         @PageableDefault(page = 0, size = 10, sort = ["createdAt"], direction = Sort.Direction.DESC) pageable: Pageable
-    ): ResponseEntity<Page<SimpleCodeGroupResponseDto>> {
+    ): ResponseEntity<Page<CodeGroupResponseDto>> {
         return ResponseEntity.ok().body(codeGroupReadService.searchCodeGroups(request,pageable))
+    }
+
+    @Operation(summary = "CodeGroup 내의 Algorithm 중 랜덤으로 단일 조회")
+    @GetMapping("/{codeGroupId}/random")
+    fun readRandomAlgorithmByCodeGroupId(@PathVariable codeGroupId: Long): ResponseEntity<AlgorithmDetailResponseDto> {
+        return ResponseEntity.ok().body(codeGroupReadService.readRandomAlgorithmByCodeGroupId(codeGroupId))
     }
 
 }

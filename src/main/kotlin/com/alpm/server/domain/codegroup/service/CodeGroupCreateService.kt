@@ -2,7 +2,7 @@ package com.alpm.server.domain.codegroup.service
 
 import com.alpm.server.domain.codegroup.dao.CodeGroupRepository
 import com.alpm.server.domain.codegroup.dto.request.CodeGroupCreateRequestDto
-import com.alpm.server.domain.codegroup.dto.response.CodeGroupDetailResponseDto
+import com.alpm.server.domain.codegroup.dto.response.CodeGroupResponseDto
 import com.alpm.server.domain.codegroup.entity.CodeGroup
 import com.alpm.server.domain.user.entity.User
 import com.alpm.server.global.common.model.Language
@@ -16,7 +16,7 @@ class CodeGroupCreateService (
 
 ) {
 
-    fun createCodeGroup(request: CodeGroupCreateRequestDto): CodeGroupDetailResponseDto {
+    fun createCodeGroup(request: CodeGroupCreateRequestDto): CodeGroupResponseDto {
         val user = SecurityContextHolder.getContext().authentication.principal as User
 
         val codeGroup = codeGroupRepository.save(
@@ -27,7 +27,7 @@ class CodeGroupCreateService (
                 owner = user,
             )
         )
-        return CodeGroupDetailResponseDto(codeGroup)
+        return CodeGroupResponseDto(codeGroup)
     }
 
 }

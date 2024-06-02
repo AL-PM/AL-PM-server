@@ -22,8 +22,8 @@ class AlgorithmCreateService (
     fun saveAlgorithm(request: AlgorithmCreateRequestDto): AlgorithmDetailResponseDto {
         val user = SecurityContextHolder.getContext().authentication.principal as User
 
-        val original = openAiService.organizeAndAnnotate(request.content!!)
-        val content = openAiService.generateBlanks(original)
+        val original = openAiService.organizeAndAnnotate(request.content!!, Language.valueOf(request.language!!))
+        val content = openAiService.generateBlanks(original, Language.valueOf(request.language))
 
         val algorithm = algorithmRepository.save(
             Algorithm(
