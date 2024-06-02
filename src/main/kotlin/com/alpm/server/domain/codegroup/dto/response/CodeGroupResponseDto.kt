@@ -1,12 +1,11 @@
 package com.alpm.server.domain.codegroup.dto.response
 
-import com.alpm.server.domain.algorithm.dto.response.SimpleAlgorithmResponseDto
 import com.alpm.server.domain.codegroup.entity.CodeGroup
 import com.alpm.server.domain.user.dto.response.OwnerResponseDto
 import com.alpm.server.global.common.model.Language
 import java.time.LocalDateTime
 
-data class CodeGroupDetailResponseDto(
+data class CodeGroupResponseDto (
     val id: Long,
 
     val name: String,
@@ -21,13 +20,13 @@ data class CodeGroupDetailResponseDto(
 
     val owner: OwnerResponseDto,
 
-    val algorithmList: List<SimpleAlgorithmResponseDto>,
+    val algorithmCount: Int,
 
     val createdAt: LocalDateTime,
 
     val updatedAt: LocalDateTime
-) {
-    constructor(codeGroup : CodeGroup): this(
+){
+    constructor (codeGroup: CodeGroup): this(
         id = codeGroup.id!!,
         name = codeGroup.name,
         referencedCount = codeGroup.referencedCount,
@@ -35,8 +34,8 @@ data class CodeGroupDetailResponseDto(
         visible = codeGroup.visible,
         language = codeGroup.language,
         owner = OwnerResponseDto(codeGroup.owner),
-        algorithmList = codeGroup.algorithmList.map { SimpleAlgorithmResponseDto(it.algorithm) },
+        algorithmCount = codeGroup.algorithmList.size,
         createdAt = codeGroup.createdAt,
-        updatedAt = codeGroup.updatedAt,
+        updatedAt = codeGroup.updatedAt
     )
 }

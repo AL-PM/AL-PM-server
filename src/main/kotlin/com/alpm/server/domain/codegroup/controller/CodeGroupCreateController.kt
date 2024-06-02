@@ -1,7 +1,7 @@
 package com.alpm.server.domain.codegroup.controller
 
 import com.alpm.server.domain.codegroup.dto.request.CodeGroupCreateRequestDto
-import com.alpm.server.domain.codegroup.dto.response.CodeGroupDetailResponseDto
+import com.alpm.server.domain.codegroup.dto.response.CodeGroupResponseDto
 import com.alpm.server.domain.codegroup.service.CodeGroupCreateService
 import com.alpm.server.global.validation.ValidationSequence
 import io.swagger.v3.oas.annotations.Operation
@@ -26,7 +26,7 @@ class CodeGroupCreateController (
     @PostMapping("/create")
     fun createCodeGroup(
         @RequestBody @Validated(value = [ValidationSequence::class]) request: CodeGroupCreateRequestDto
-    ): ResponseEntity<CodeGroupDetailResponseDto> {
+    ): ResponseEntity<CodeGroupResponseDto> {
         return ResponseEntity.ok().body(codeGroupCreateService.createCodeGroup(request))
     }
 
