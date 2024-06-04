@@ -13,7 +13,7 @@ import org.springframework.stereotype.Repository
 interface CodeGroupRepository: JpaRepository<CodeGroup, Long> {
 
     @Query("select cg " +
-            "from CodeGroup cg join UserCodeGroup ucg on ucg.codeGroup = cg " +
+            "from CodeGroup cg " +
             "where (cg.visible = true or cg.owner = :user)")
     fun findCodeGroups(user: User, pageable: Pageable): Page<CodeGroup>
 
@@ -22,12 +22,14 @@ interface CodeGroupRepository: JpaRepository<CodeGroup, Long> {
             "where ucg.user = :user and (cg.visible = true or cg.owner = :user)")
     fun findCodeGroupsByUser(user: User, pageable: Pageable) : Page<CodeGroup>
 
-    fun findCodeGroupsByOwner(owner: User, pageable: Pageable): Page<CodeGroup>
+    @Query("select cg " +
+            "from CodeGroup cg " +
+            "where cg.owner = :owner and (cg.visible = true or cg.owner = :user)")
+    fun findCodeGroupsByOwner(user: User, owner: User, pageable: Pageable): Page<CodeGroup>
 
-    @Query("select cg from CodeGroup cg " +
-            "join UserCodeGroup ucg on ucg.codeGroup = cg " +
-            "where ucg.user = :user " +
-            "and (cg.visible = true or cg.owner = :user) " +
+    @Query("select cg " +
+            "from CodeGroup cg " +
+            "where (cg.visible = true or cg.owner = :user) " +
             "and (:language is null or cg.language = :language) " +
             "and (:verified is null or cg.verified = :verified) " +
             "and (:keyword is null " +

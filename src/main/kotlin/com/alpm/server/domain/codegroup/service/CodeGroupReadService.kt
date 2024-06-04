@@ -51,8 +51,9 @@ class CodeGroupReadService(
     }
 
     fun readCodeGroupsByOwner(ownerId: Long, pageable: Pageable): Page<CodeGroupResponseDto> {
-        val user = userRepository.findByIdOrNull(ownerId) ?: throw CustomException(ErrorCode.USER_NOT_FOUND)
-        val codeGroup = codeGroupRepository.findCodeGroupsByOwner(user, pageable)
+        val user = SecurityContextHolder.getContext().authentication.principal as User
+        val owner = userRepository.findByIdOrNull(ownerId) ?: throw CustomException(ErrorCode.USER_NOT_FOUND)
+        val codeGroup = codeGroupRepository.findCodeGroupsByOwner(user, owner, pageable)
 
         return codeGroup.map { CodeGroupResponseDto(it) }
     }
