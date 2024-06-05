@@ -24,13 +24,13 @@ class User (
 
     var profile: String,
 
-    val tracePoint: Int = 0,
+    var tracePoint: Int = 0,
 
-    val fillPoint: Int = 0,
+    var fillPoint: Int = 0,
 
-    val blockPoint: Int = 0,
+    var blockPoint: Int = 0,
 
-    val sequencePoint: Int = 0,
+    var sequencePoint: Int = 0,
 
     // 해당 User의 CodeGroup 리스트
     @OneToMany(
