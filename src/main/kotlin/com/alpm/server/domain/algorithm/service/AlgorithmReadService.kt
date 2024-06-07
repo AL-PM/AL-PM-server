@@ -33,17 +33,6 @@ class AlgorithmReadService(
         return AlgorithmDetailResponseDto(algorithm)
     }
 
-    fun readAlgorithmByIdForAnonymous(algorithmId: Long): AlgorithmDetailResponseDto {
-        val algorithm = algorithmRepository.findByIdOrNull(algorithmId)
-            ?: throw CustomException(ErrorCode.ALGORITHM_NOT_FOUND)
-
-        if (!algorithm.verified) {
-            throw CustomException(ErrorCode.ANONYMOUS)
-        }
-
-        return AlgorithmDetailResponseDto(algorithm)
-    }
-
     fun readAlgorithms(pageable: Pageable): Page<SimpleAlgorithmResponseDto> {
         return algorithmRepository.findAll(pageable).map { SimpleAlgorithmResponseDto(it) }
     }

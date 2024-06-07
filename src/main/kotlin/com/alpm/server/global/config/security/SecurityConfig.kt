@@ -28,7 +28,7 @@ class SecurityConfig (
             it.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         }
         .authorizeHttpRequests {
-            it.requestMatchers("/oauth2/authorization/**", "/oauth2/code/**", "/algorithm/anonymous/**",
+            it.requestMatchers("/oauth2/authorization/**", "/oauth2/code/**",
                 "/swagger-ui/**", "/v3/api-docs/**")
                 .permitAll()
                 .anyRequest().authenticated()
