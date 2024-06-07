@@ -86,4 +86,13 @@ class AlgorithmReadService(
         return algorithmList.map { SimpleAlgorithmResponseDto(it) }
     }
 
+    fun readRandomAlgorithmByCodeGroupId(codeGroupId: Long): AlgorithmDetailResponseDto {
+        val codeGroup = codeGroupRepository.findByIdOrNull(codeGroupId)
+            ?: throw CustomException(ErrorCode.CODE_GROUP_NOT_FOUND)
+
+        val pick = codeGroup.algorithmList.random()
+
+        return AlgorithmDetailResponseDto(pick.algorithm)
+    }
+
 }

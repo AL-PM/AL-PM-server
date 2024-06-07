@@ -88,4 +88,10 @@ class AlgorithmReadController (
         return ResponseEntity.ok().body(algorithmReadService.searchAlgorithms(request,pageable))
     }
 
+    @Operation(summary = "CodeGroup 내의 Algorithm 중 랜덤으로 단일 조회")
+    @GetMapping("/random/codeGroup/{codeGroupId}")
+    fun readRandomAlgorithmByCodeGroupId(@PathVariable codeGroupId: Long): ResponseEntity<AlgorithmDetailResponseDto> {
+        return ResponseEntity.ok().body(algorithmReadService.readRandomAlgorithmByCodeGroupId(codeGroupId))
+    }
+
 }
