@@ -32,14 +32,6 @@ class AlgorithmReadController (
         return ResponseEntity.ok().body(algorithmReadService.readAlgorithmById(algorithmId))
     }
 
-    @Operation(summary = "비회원용 Algorithm 단일 조회")
-    @GetMapping("/anonymous/{algorithmId}")
-    fun readAlgorithmForAnonymous(
-        @PathVariable("algorithmId") algorithmId: Long
-    ): ResponseEntity<AlgorithmDetailResponseDto> {
-        return ResponseEntity.ok().body(algorithmReadService.readAlgorithmByIdForAnonymous(algorithmId))
-    }
-
     @Operation(summary = "Algorithm 전체 조회")
     @GetMapping("/")
     fun readAlgorithms(
@@ -86,6 +78,12 @@ class AlgorithmReadController (
         @PageableDefault(page = 0, size = 10, sort = ["createdAt"], direction = Sort.Direction.DESC) pageable: Pageable
     ): ResponseEntity<Page<SimpleAlgorithmResponseDto>> {
         return ResponseEntity.ok().body(algorithmReadService.searchAlgorithms(request,pageable))
+    }
+
+    @Operation(summary = "CodeGroup 내의 Algorithm 중 랜덤으로 단일 조회")
+    @GetMapping("/random/codeGroup/{codeGroupId}")
+    fun readRandomAlgorithmByCodeGroupId(@PathVariable codeGroupId: Long): ResponseEntity<AlgorithmDetailResponseDto> {
+        return ResponseEntity.ok().body(algorithmReadService.readRandomAlgorithmByCodeGroupId(codeGroupId))
     }
 
 }
