@@ -1,12 +1,15 @@
 package com.alpm.server.domain.user.controller
 
 import com.alpm.server.domain.user.dto.response.RefreshTokenResponseDto
+import com.alpm.server.domain.user.dto.response.SimpleUserResponseDto
 import com.alpm.server.domain.user.dto.response.UserWithHistoryResponseDto
+import com.alpm.server.domain.user.entity.User
 import com.alpm.server.domain.user.service.UserService
 import com.alpm.server.global.auth.jwt.JwtAuthenticationService
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestHeader
@@ -34,6 +37,12 @@ class UserController (
     @GetMapping("/{id}")
     fun readUserById(@PathVariable("id") id: Long): ResponseEntity<UserWithHistoryResponseDto> {
         return ResponseEntity.ok().body(userService.readUserById(id))
+    }
+
+    @Operation(summary = "User 단일 삭제")
+    @DeleteMapping("/{id}")
+    fun deleteUserById(@PathVariable("id") id: Long): ResponseEntity<Unit> {
+        return ResponseEntity.ok().body(userService.deletedById(id))
     }
 
 }
