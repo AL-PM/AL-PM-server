@@ -92,7 +92,7 @@ class JwtAuthenticationService (
                 .verifyWith(Keys.hmacShaKeyFor(secretKey.toByteArray(Charsets.UTF_8)))
                 .build()
                 .parseSignedClaims(token)
-            if (claims.payload["provider"] != user.provider || claims.payload["uid"] != user.uid) {
+            if (user.deleted || claims.payload["provider"] != user.provider || claims.payload["uid"] != user.uid) {
                 return false
             }
 
