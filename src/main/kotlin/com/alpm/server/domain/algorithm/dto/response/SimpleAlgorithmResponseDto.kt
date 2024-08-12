@@ -17,6 +17,8 @@ data class SimpleAlgorithmResponseDto (
 
     val language: Language, //(enum - C/C++, JAVA, Python),
 
+    var deleted: Boolean,
+
     val owner: OwnerResponseDto,
 
     val createdAt: LocalDateTime,
@@ -31,6 +33,7 @@ data class SimpleAlgorithmResponseDto (
         referencedCount = algorithm.referencedCount,
         verified = algorithm.verified,
         language = algorithm.language,
+        deleted = algorithm.deleted,
         owner = OwnerResponseDto(algorithm.owner),
         createdAt = algorithm.createdAt,
         updatedAt = algorithm.updatedAt,

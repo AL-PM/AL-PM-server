@@ -17,7 +17,6 @@ enum class ErrorCode (
     NOT_YOUR_CODE_GROUP(HttpStatus.BAD_REQUEST, "권한이 없는 코드그룹입니다"),
     LANGUAGE_MISMATCH(HttpStatus.BAD_REQUEST, "언어가 일치하지 않습니다"),
 
-    USER_ALREADY_DELETED(HttpStatus.BAD_REQUEST, "이미 삭제된 유저입니다"),
     NO_GRANT(HttpStatus.BAD_REQUEST, "권한이 없습니다"),
 
     WRONG_URL(HttpStatus.NOT_FOUND, "잘못된 url 입니다"),
