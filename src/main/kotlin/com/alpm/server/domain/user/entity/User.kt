@@ -6,10 +6,15 @@ import com.alpm.server.domain.history.entity.History
 import com.alpm.server.global.common.model.BaseTimeEntity
 import com.alpm.server.global.common.relation.entity.UserCodeGroup
 import jakarta.persistence.*
+import org.hibernate.annotations.SQLDelete
+import org.hibernate.annotations.SQLRestriction
+import org.hibernate.annotations.Where
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
 
 @Entity
+@SQLDelete(sql = "UPDATE USER SET deleted = true WHERE id = ?")
+@SQLRestriction(value = "deleted = false")
 class User (
 
     @Id
@@ -23,6 +28,8 @@ class User (
     val uid: String,
 
     var profile: String,
+
+    val deleted: Boolean = false,
 
     var tracePoint: Int = 0,
 

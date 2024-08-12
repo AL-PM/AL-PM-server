@@ -15,6 +15,8 @@ data class SimpleUserResponseDto (
 
     val profile: String,
 
+    val deleted: Boolean,
+
     val tracePoint: Int,
 
     val fillPoint: Int,
@@ -35,6 +37,7 @@ data class SimpleUserResponseDto (
         provider = user.provider,
         uid = user.uid,
         profile = user.profile,
+        deleted = user.deleted,
         tracePoint = user.tracePoint,
         fillPoint = user.fillPoint,
         blockPoint = user.blockPoint,
