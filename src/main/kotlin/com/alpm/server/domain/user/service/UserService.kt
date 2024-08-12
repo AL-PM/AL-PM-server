@@ -69,11 +69,6 @@ class UserService (
             throw CustomException(ErrorCode.NO_GRANT)
         }
 
-        // 이미 삭제된 사용자의 경우
-        if (user.deleted) {
-            throw CustomException(ErrorCode.USER_ALREADY_DELETED)
-        }
-
         userRepository.deleteById(id)
     }
 
