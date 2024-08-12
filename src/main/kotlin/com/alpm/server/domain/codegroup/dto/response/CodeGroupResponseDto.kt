@@ -18,6 +18,8 @@ data class CodeGroupResponseDto (
 
     val language: Language, //(enum - C/C++, JAVA, Python),
 
+    val deleted: Boolean,
+
     val owner: OwnerResponseDto,
 
     val algorithmCount: Int,
@@ -33,6 +35,7 @@ data class CodeGroupResponseDto (
         verified = codeGroup.verified,
         visible = codeGroup.visible,
         language = codeGroup.language,
+        deleted = codeGroup.deleted,
         owner = OwnerResponseDto(codeGroup.owner),
         algorithmCount = codeGroup.algorithmList.size,
         createdAt = codeGroup.createdAt,

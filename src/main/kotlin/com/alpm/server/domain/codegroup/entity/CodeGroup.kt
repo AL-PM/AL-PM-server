@@ -5,8 +5,12 @@ import com.alpm.server.global.common.model.BaseTimeEntity
 import com.alpm.server.global.common.model.Language
 import com.alpm.server.global.common.relation.entity.CodeGroupAlgorithm
 import jakarta.persistence.*
+import org.hibernate.annotations.SQLDelete
+import org.hibernate.annotations.SQLRestriction
 
 @Entity
+@SQLDelete(sql = "UPDATE CODEGROUP SET deleted = true WHERE id = ?")
+@SQLRestriction(value = "deleted = false")
 class CodeGroup (
 
     @Id
@@ -22,6 +26,8 @@ class CodeGroup (
     val visible: Boolean,
 
     val language: Language,
+
+    val deleted: Boolean = false,
 
     // 해당 CodeGroup 제작자
     @ManyToOne(fetch = FetchType.LAZY)
