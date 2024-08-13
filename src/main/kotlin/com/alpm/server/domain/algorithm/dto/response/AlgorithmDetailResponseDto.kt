@@ -17,6 +17,8 @@ data class AlgorithmDetailResponseDto (
 
     val language: Language, //(enum - C/C++, JAVA, Python),
 
+    var deleted: Boolean,
+
     val original: String,
 
     val content: String,
@@ -37,6 +39,7 @@ data class AlgorithmDetailResponseDto (
         verified = algorithm.verified,
         language = algorithm.language,
         name = algorithm.name,
+        deleted = algorithm.deleted,
         original = algorithm.original,
         content = algorithm.content,
         description = algorithm.description,

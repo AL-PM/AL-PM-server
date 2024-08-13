@@ -3,11 +3,13 @@ package com.alpm.server.domain.user.service
 import com.alpm.server.domain.history.dao.HistoryRepository
 import com.alpm.server.domain.history.dto.response.HistorySizeDto
 import com.alpm.server.domain.user.dao.UserRepository
+import com.alpm.server.domain.user.dto.response.SimpleUserResponseDto
 import com.alpm.server.domain.user.dto.response.UserWithHistoryResponseDto
 import com.alpm.server.domain.user.entity.User
 import com.alpm.server.global.exception.CustomException
 import com.alpm.server.global.exception.ErrorCode
 import org.springframework.data.repository.findByIdOrNull
+import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Service
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -56,6 +58,18 @@ class UserService (
             }
 
         return UserWithHistoryResponseDto(user, historySizeList)
+    }
+
+    fun deletedById(id: Long) {
+        val auth = SecurityContextHolder.getContext().authentication.principal as User
+        val user = userRepository.findByIdOrNull(id) ?: throw CustomException(ErrorCode.USER_NOT_FOUND)
+
+        // 자신이 아닌 다른 사용자를 삭제하려 할 경우
+        if (auth.id!! != user.id) {
+            throw CustomException(ErrorCode.NO_GRANT)
+        }
+
+        userRepository.deleteById(id)
     }
 
 }

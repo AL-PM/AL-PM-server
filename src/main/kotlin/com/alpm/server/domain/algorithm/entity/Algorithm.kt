@@ -4,8 +4,12 @@ import com.alpm.server.domain.user.entity.User
 import com.alpm.server.global.common.model.BaseTimeEntity
 import com.alpm.server.global.common.model.Language
 import jakarta.persistence.*
+import org.hibernate.annotations.SQLDelete
+import org.hibernate.annotations.SQLRestriction
 
 @Entity
+@SQLDelete(sql = "UPDATE algorithm SET deleted = true WHERE id = ?")
+@SQLRestriction("deleted <> true")
 class Algorithm(
 
     @Id
@@ -19,6 +23,8 @@ class Algorithm(
     val verified: Boolean = false,
 
     val language: Language,
+
+    var deleted: Boolean = false,
 
     @Column(columnDefinition = "LONGTEXT")
     val original: String,
